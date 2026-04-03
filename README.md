@@ -15,7 +15,7 @@ The topology uses a collapsed core/distribution design. It includes an edge laye
 
 ### Topology
 
-![Topology Diagram](topology.png)
+![Topology Diagram](images/GNS3 Lab Topology README image.PNG)
 
 
 ### Protocols and Features
