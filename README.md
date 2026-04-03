@@ -15,7 +15,7 @@ The topology uses a collapsed core/distribution design. It includes an edge laye
 
 ### Topology
 
-![Topology Diagram](images/READMEtopology.png)
+![Topology Diagram](images/READMEtopology.PNG)
 
 
 ### Protocols and Features
