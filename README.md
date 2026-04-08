@@ -4,14 +4,14 @@
 
 ## Project Overview
 
-This lab is designed to give CCNA students a free lab to build and practice networking and virtualization skills on a simulated company network. The scenario for this project is that a mid-size single site company with HR, Sales, Finance, and IT departments need a network designed with internal servers, secure segmentation, reliable routing, high availability, network monitoring, and a logging system. For this scenario, the external services such as public DNS, email, file storage, and internet are assumed be handled by third-party companies and are outside the scope of this lab.
+This lab is designed to give CCNA students a free lab to build and practice networking and virtualization skills on a simulated company network. The scenario for this project is that a mid-size single site company with HR, Sales, Finance, and IT departments need a network designed with internal servers, secure segmentation, reliable routing, high availability, network monitoring, and a logging system. For this scenario, the external services such as public DNS, email, file storage, and internet are assumed to be handled by third-party companies and are outside the scope of this lab.
 
-Every device in the lab except the NAT node requires full configuration. The NAT node is pre-configured through GNS3 and gives the devices NAT access. This lab is configured from the ground up, making it a valuable learning exercise for both myself and other CCNA students. 
+Every device in the lab except the NAT node requires full configuration. The NAT node is pre-configured through GNS3 and provides NAT access to the network. This lab is configured from the ground up, making it a valuable learning exercise for both myself and other CCNA students. 
 
 
 ## Network Overview
 
-The topology uses a collapsed core/distribution design. It includes an edge layer with a pfSense firewall connecting to a simulated ISP, a core/distrubution layer with two redundant Layer 3 switches, and an access layer with three Layer 2 access switches connecting to end devices and two Ubuntu Linux servers handling internal services.
+The topology uses a collapsed core/distribution design. It includes an edge layer with a pfSense firewall connecting to a simulated ISP, a core/distrubution layer with two redundant Layer 3 switches, and an access layer with three Layer 2 access switches connecting to end devices, servers, and a dedicated management device.
 
 ### Topology
 
@@ -26,15 +26,17 @@ The topology uses a collapsed core/distribution design. It includes an edge laye
 - **Security:** ACLs, Port Security, pfSense Firewall Rules
 - **Services:** DHCP, DNS, NTP, HTTP
 - **Monitoring:** SNMP, Syslog
+- **Management:** Dedicated management VLAN with SSH access
 
 ## Key Features
 
 - **Routing Protocols:** OSPF is configured on both the edge layer and core/distribution layer to provide reliable routing.
-- **High Availability:** HSRP is enabled per VLAN group. Both core switches actively forward traffic so no switch is idly standing by. L3-Multilayer-SW1 is the HSRP active gateway for VLANs 10, 20, and 30 while L3-Multilayer-SW2 is the active gateway for VLANs 40, 50, and 60 with each acting as a standby for the other. Each core device has redundant connections to other devices in case of a failure.
+- **High Availability:** HSRP is enabled per VLAN group. Both core switches actively forward traffic so no switch is idly standing by. L3-Multilayer-SW1 is the HSRP active gateway for VLANs 10, 20, 30, and 99 while L3-Multilayer-SW2 is the active gateway for VLANs 40, 50, and 60 with each acting as a standby for the other. Each core device has redundant connections to other devices in case of a failure.
 - **Segmentation:** Departments are segmented using VLANs with trunk ports on all switches.
 - **Security:** pfSense firewall rules, ACLs, and port security are configured for traffic control across the network.
+- **Management:** A dedicated management VLAN (99) which isolates administrative traffic from user traffic and includes an Ubuntu Admin PC permitted to SSH into the network devices.
 - **Internal Network Services:** DHCP, DNS, NTP, and HTTP on a linux server provide necessary infrastructure services on the internal network.
-- **Monitoring Services:** SNMP and a Syslog provide monitoring for device statistics and a centralized logging system for devices.
+- **Monitoring Services:** SNMP and Syslog provide monitoring for device statistics and a centralized logging system for devices.
 
 ## Tools Used
 
@@ -58,7 +60,7 @@ These images are required to run the lab. You must obtain them yourself from the
 | pfSense CE 2.7.2 | [GNS3 Appliance / pfSense CE 2.7.2](https://gns3.com/marketplace/appliances/pfsense) |
 | Ubuntu Server (Noble Numbat) | [GNS3 Appliance / Ubuntu Server](https://gns3.com/marketplace/appliances/ubuntu-cloud-guest) |
 
-**Importing the appliances:** To import the appliance, follow the tutorial [Here](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) for each appliance.
+**Importing the appliances:** To import the appliance, follow the tutorial [here](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) for each appliance.
 
 ### Hardware
 
