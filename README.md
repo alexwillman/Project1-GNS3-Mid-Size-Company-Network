@@ -80,7 +80,7 @@ Download and install GNS3 and the matching GNS3 VM from [gns3.com](https://www.g
 
 - **IOSvL2** — [Follow this tutorial](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) - Requires 768MB of RAM with a telnet console
 - **pfSense** — [Follow this tutorial](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) - Requires 512MB of RAM with VNC console 
-- **Ubuntu** — [Follow this tutorial](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) - Requires 1024MB of RAM with telnet console
+- **Ubuntu** — [Follow this tutorial](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) - Requires 512MB of RAM with telnet console
 
 ### 3. Import the project
 
