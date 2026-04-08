@@ -30,12 +30,12 @@ The topology uses a collapsed core/distribution design. It includes an edge laye
 
 ## Key Features
 
-- **Routing Protocols:** OSPF is configured on both the edge layer and core/distribution layer to provide reliable routing.
+- **Routing Protocols:** OSPF is configured on both the edge layer and core/distribution layer to provide dynamic routing.
 - **High Availability:** HSRP is enabled per VLAN group. Both core switches actively forward traffic so no switch is idly standing by. L3-Multilayer-SW1 is the HSRP active gateway for VLANs 10, 20, 30, and 99 while L3-Multilayer-SW2 is the active gateway for VLANs 40, 50, and 60 with each acting as a standby for the other. Each core device has redundant connections to other devices in case of a failure.
 - **Segmentation:** Departments are segmented using VLANs with trunk ports on all switches.
 - **Security:** pfSense firewall rules, ACLs, and port security are configured for traffic control across the network.
 - **Management:** A dedicated management VLAN (99) which isolates administrative traffic from user traffic and includes an Ubuntu Admin PC permitted to SSH into the network devices.
-- **Internal Network Services:** DHCP, DNS, NTP, and HTTP on a linux server provide necessary infrastructure services on the internal network.
+- **Internal Network Services:** DHCP, DNS, NTP, and HTTP on a linux server provide infrastructure services on the internal network.
 - **Monitoring Services:** SNMP and Syslog provide monitoring for device statistics and a centralized logging system for devices.
 
 ## Tools Used
