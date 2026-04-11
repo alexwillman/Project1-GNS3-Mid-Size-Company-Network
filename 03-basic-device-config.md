@@ -46,7 +46,7 @@ write memory
 
 ## Setting the Enable Secret
 
-The enable secret command sets and encrypts the privileged EXEC password for the device. The console line password (next section) will not be encrypted so we will use service password-encryption to encrypt that. Apply to each switch.
+The enable secret command sets and encrypts the privileged EXEC password for the device. The console line password (next part) will not be encrypted so we will use service password-encryption to encrypt that. Apply to each switch.
 
 You must be in global configuration mode to set this. (configure terminal)
 
