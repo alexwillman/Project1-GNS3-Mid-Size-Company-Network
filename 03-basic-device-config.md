@@ -48,12 +48,10 @@ write memory
 
 The enable secret encrypts the privileged EXEC password using MD5 (Type 5). Apply to each switch.
 
-You must be in global configuration mode to set this. (configure terminal)
-
 ### Commands: 
 
 ```
-enable secret P@ssW0rd!
+enable secret P@ssw0rd!
 exit
 write memory
 ```
@@ -65,11 +63,13 @@ Password is covered for security purposes.
 
 ## Configuring the Console Line
 
-We will secure the console port using a password, set the session timeout to 10 minutes of inactivity, and disable syslog messages to avoid typing disruption. Apply this to each switch.
+We will secure the console port using a password, set the session timeout to 10 minutes of inactivity, and disable syslog messages to avoid typing disruption. The console password is plaintext by default so service password-encryption applies Type 7 encryption to it. Type 7 is a very weak encryption algorithm so in a production environment you would use login local instead to authenticate against the MD5 encrypted local user database. This lab uses a separate console password to avoid a dependency on the SSH username which is configured in the next step.
+Apply to each switch.
 
 ### Commands:
 
 ```
+service password-encryption
 line console 0
 password P@ssw0rd!
 login
