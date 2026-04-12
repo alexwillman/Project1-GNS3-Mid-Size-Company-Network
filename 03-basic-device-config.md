@@ -44,9 +44,9 @@ write memory
 | Layer 2 Access Switch 2 | L2-SW2 |
 | Layer 2 Access Switch 3 | L2-SW3 |
 
-## Setting the Enable Secret
+## Setting the Enable Secret and Encrypting Passwords
 
-The enable secret command sets and encrypts the privileged EXEC password for the device. The console line password (next part) will not be encrypted so we will use service password-encryption to encrypt it in the running configuration. Apply to each switch.
+The enable secret encrypts the privileged EXEC password using MD5 (Type 5). Apply to each switch.
 
 You must be in global configuration mode to set this. (configure terminal)
 
@@ -54,7 +54,6 @@ You must be in global configuration mode to set this. (configure terminal)
 
 ```
 enable secret P@ssW0rd!
-service password-encryption
 exit
 write memory
 ```
@@ -186,64 +185,35 @@ Verify:
 
 After doing a show running-config, L3-Multilayer-SW1 should include everything we just configured and show this:
 
+**Service password-encryption to encrypt the console password:**
 ```
-Current configuration : 2329 bytes
+service password-encryption
+```
+
+**Hostname with the hostname of the device:**
+```
 !
-! Last configuration change at 06:29:58 UTC Sat Apr 11 2026
+hostname L3-Multilayer-SW1
 !
-version 15.2
-service timestamps debug datetime msec
-service timestamps log datetime msec
-service password-encryption 
-service compress-config
+```
+
+**The enable secret and encrypted password:**
+```
 !
-hostname L3-Multilayer-SW1   
+enable secret 5 [MD5-hash]
+```
+
+**SSH username, privilege, encrypted password, and domain name:**
+```
 !
-boot-start-marker
-boot-end-marker
-!
-!
-enable secret 5 $1$Zh03$D4cYhS2RyPpG7RFs0sJBu.  
-!
-username ecorpadmin privilege 15 secret 5 $1$Spr8$viNzy3X9rTcWHfggt3l4t0
+username ecorpadmin privilege 15 secret 5 [MD5-hash]
 no aaa new-model
 !
 !
-!
-!
-!
-!
-!
-!
-no ip domain-lookup
 ip domain-name ecorp.local
-ip cef
-no ipv6 cef
-!
-!
-!
-spanning-tree mode pvst
-spanning-tree extend system-id
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-!
-interface GigabitEthernet0/0
- negotiation auto
-!
-interface GigabitEthernet0/1
- negotiation auto
+```
+**The unused interfaces shut down and in vlan 999:**
+```
 !
 interface GigabitEthernet0/2
  switchport access vlan 999
@@ -257,80 +227,23 @@ interface GigabitEthernet0/3
  shutdown
  negotiation auto
 !
-interface GigabitEthernet1/0
- negotiation auto
-!
-interface GigabitEthernet1/1
- negotiation auto
-!
-interface GigabitEthernet1/2
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet1/3
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet2/0
- negotiation auto
-!
-interface GigabitEthernet2/1
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet2/2
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet2/3
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet3/0
- negotiation auto
-!
-interface GigabitEthernet3/1
- negotiation auto
-!
-interface GigabitEthernet3/2
- switchport access vlan 999
- switchport mode access
- shutdown
- negotiation auto
-!
-interface GigabitEthernet3/3
- negotiation auto
-!
-ip forward-protocol nd
-!
-ip http server
-ip http secure-server
-!
+```
+**SSH version 2 and encryption algorithms:**
+```
 ip ssh version 2
 ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
 ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
-!
-!
-!
-!
-!
-!
-control-plane
+```
+**Correct banner:**
+```
 !
 banner motd ^C AUTHORIZED USERS ONLY. UNAUTHORIZED ACCESS IS PROHIBITED! ^C
+```
+**Console and VTY lines settings:**
+```
 !
 line con 0
- password 7 060101185D62025356142A
+ password 7 [type 7 encrypted password]
  logging synchronous
  login
 line aux 0
@@ -338,6 +251,4 @@ line vty 0 4
  login local
  transport input ssh
 !
-!
-end
 ```
