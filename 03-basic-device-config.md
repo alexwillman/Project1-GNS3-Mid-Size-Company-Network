@@ -5,7 +5,7 @@ The devices these are configured on are L3-Multilayer-SW1, L3-Multilayer-SW2, L2
 
 ## Credentials in the lab
 
-You can use any password you would like for this lab. Common passwords are not recommended for security best practices in real environments, but for test environment purposes they are acceptable. However, it is recommended you use secure passwords to familiarize yourself with these practices. 
+You can use any password you would like for this lab. Common passwords are not recommended for security purposes but for test environment purposes they are acceptable. However, it is recommended you use secure passwords to familiarize yourself with these practices. 
 
 | Setting | Credential |
 |---------|------------|
@@ -46,7 +46,7 @@ write memory
 
 ## Setting the Enable Secret
 
-The enable secret command sets and encrypts the privileged EXEC password for the device. The console line password (next part) will not be encrypted so we will use service password-encryption to encrypt that. Apply to each switch.
+The enable secret command sets and encrypts the privileged EXEC password for the device. The console line password (next part) will not be encrypted so we will use service password-encryption to encrypt it in the running configuration. Apply to each switch.
 
 You must be in global configuration mode to set this. (configure terminal)
 
@@ -130,16 +130,214 @@ vlan 999
 name BLACK-HOLE
 exit
 ```
+![](images/blackholevlanimg.PNG)
+
 **Putting the unused ports into the black hole VLAN and shut them down:**
 
-Identify which ports are not being used and include them. [x/x - x/x] is the port range. Do not include the brackets.
+Identify which ports are not being used and include them. For the example, we are using Gi0/2 and Gi0/3 so the range will be 0/2-3.
 ```
-interface range GigabitEthernet[x/x - x/x]
+interface range GigabitEthernet0/2-3
 switchport mode access
 switchport access vlan 999
 shutdown
 exit
-write
+do write
 ```
 **Note:** We will remove vlan 999 from the allowed vlan list in section 04.
 
+![](images/shutdownportsimg.PNG)
+
+## Verification
+
+After completing the commands above, you must verify that the configuration was applied correctly.
+
+**Verify general configs:**
+
+```
+show running-config
+```
+*If in a configuration mode you must put 'do show running-config'*
+
+Verify:
+- Correct hostname
+- Enable secret is configured
+- Banner motd shows the correct message
+- Console and VTY lines show correct values with encrypted passwords
+
+**Verify SSH is enabled:**
+
+```
+show ip ssh
+```
+![](images/sshverificationimg.PNG)
+
+**Verify unused ports are shut down:**
+
+```
+show interfaces status
+```
+Verify:
+- Status is disabled
+- Vlan is 999
+
+![](images/shutdownportsverificationimg.PNG)
+
+### L3-Multilayer-SW1 complete configuration
+
+After doing a show running-config, L3-Multilayer-SW1 should include everything we just configured and show this:
+
+```
+Current configuration : 2329 bytes
+!
+! Last configuration change at 06:29:58 UTC Sat Apr 11 2026
+!
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption 
+service compress-config
+!
+hostname L3-Multilayer-SW1   
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$Zh03$D4cYhS2RyPpG7RFs0sJBu.  
+!
+username ecorpadmin privilege 15 secret 5 $1$Spr8$viNzy3X9rTcWHfggt3l4t0
+no aaa new-model
+!
+!
+!
+!
+!
+!
+!
+!
+no ip domain-lookup
+ip domain-name ecorp.local
+ip cef
+no ipv6 cef
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface GigabitEthernet0/0
+ negotiation auto
+!
+interface GigabitEthernet0/1
+ negotiation auto
+!
+interface GigabitEthernet0/2
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet0/3
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/0
+ negotiation auto
+!
+interface GigabitEthernet1/1
+ negotiation auto
+!
+interface GigabitEthernet1/2
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet1/3
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ negotiation auto
+!
+interface GigabitEthernet2/1
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/2
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/3
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/0
+ negotiation auto
+!
+interface GigabitEthernet3/1
+ negotiation auto
+!
+interface GigabitEthernet3/2
+ switchport access vlan 999
+ switchport mode access
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet3/3
+ negotiation auto
+!
+ip forward-protocol nd
+!
+ip http server
+ip http secure-server
+!
+ip ssh version 2
+ip ssh server algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+ip ssh client algorithm encryption aes128-ctr aes192-ctr aes256-ctr
+!
+!
+!
+!
+!
+!
+control-plane
+!
+banner motd ^C AUTHORIZED USERS ONLY. UNAUTHORIZED ACCESS IS PROHIBITED! ^C
+!
+line con 0
+ password 7 060101185D62025356142A
+ logging synchronous
+ login
+line aux 0
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+end
+```
