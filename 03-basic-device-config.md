@@ -115,6 +115,13 @@ banner motd # AUTHORIZED USERS ONLY. UNAUTHORIZED ACCESS IS PROHIBITED! #
 ```
 **Note:** The message should begin and end with a special character
 
+**Optional - clear default banners by using:**
+```
+no banner exec
+no banner login
+no banner incoming
+```
+
 To confirm that this worked, log out of the switch and before you enter your password you should see the banner.
 
 ![](images/bannermotdimg.PNG)
@@ -169,6 +176,12 @@ Verify:
 show ip ssh
 ```
 ![](images/sshverificationimg.PNG)
+
+**Verify SSH key was created sucessfully:**
+```
+show crypto key mypubkey rsa
+```
+![](images/verifysshkeyimg.PNG)
 
 **Verify unused ports are shut down:**
 
