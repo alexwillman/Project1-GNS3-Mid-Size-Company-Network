@@ -84,5 +84,63 @@ do write
 
 ![](images/L3SW2singletrunkportsimg.PNG)
 
+### L2-SW1 Single Trunk Ports:
+```
+configure terminal
+interface Gi1/0
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,99,666
+switchport trunk allowed vlan remove 1
+switchport trunk allowed vlan remove 999
+switchport trunk native vlan 666
+no shutdown
+exit
+do write
+```
+**Note:** Since we updated the native vlan on this side of the link, the error from before will be updated on each switch and STP will unblock the port on both sides. You can see the port consistency restored message in the image below after setting the native VLAN.
+
+![](images/L2SW1singletrunkportsimg.PNG)
+
+### L2-SW3 Single Trunk Ports:
+```
+configure terminal
+interface Gi2/0
+switchport trunk encapsulation dot1q
+switchport mode trunk
+switchport trunk allowed vlan 10,20,30,40,50,60,99,666
+switchport trunk allowed vlan remove 1
+switchport trunk allowed vlan remove 999
+switchport trunk native vlan 666
+no shutdown
+exit
+do write
+```
+
+![](images/L2SW3singletrunkportsimg.PNG)
+
+
+### Verify trunk ports
+
+On each switch, use this command to verify information about the trunk ports:
+```
+show interfaces trunk
+```
+Verify:
+
+ - The mode shows on
+ - The status is trunking
+ - The native VLAN is 666
+ - The allowed VLANs are 10,20,30,40,50,60,99,666
+ - The allowed list does NOT show VLAN 1 and 999
+
+![](images/verifysingletrunkportsimg.PNG)
+
+**Common Problems:**
+| Problem | Fix | 
+|---------|-----|
+| Active VLANs are missing from allowed list | Run "switchport trunk allowed vlan add [vlan id]" on the affected interface |
+| VLAN 1 or 999 is in the allowed list | Run "switchport trunk allowed vlan remove 1" and "switchport trunk allowed vlan remove 999" on the affected interface |
+| Status does not show trunking | Verify encapsulation is set to dot1q using "show interfaces [interface] switchport". If not, rerun "switchport trunk encapsulation dot1q" and then "switchport mode trunk" on that interface |
 
 
