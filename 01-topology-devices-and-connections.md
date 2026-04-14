@@ -20,7 +20,7 @@ servers via access ports with VLAN segmentation, and an end device/server layer 
 
 This consists of a GNS3 NAT node and simulates internet connectivity for the network and provides NAT translation. The NAT node connects to the WAN interface of the pfSense firewall and requires no configuration.
 
-**Devices:** GNS3 NAT node
+**Devices:** GNS3 NAT node 
 
 ### Edge
 
