@@ -4,7 +4,7 @@ This section covers the complete addressing scheme and VLAN assignments for the 
 use the 172.16.0.0/12 range with /25 subnets, and the point-to-point links between pfSense and the Layer 3 Switches use the 10.0.0.0/8 range with /30 subnets. The peer link between both core switches will not use point-to-point addressing because it is an EtherChannel trunk. OSPF adjacency for those devices will form over the VLAN 99 SVI.
 
 This network will have devices that are configured statically and dynamically. End device workstations will be configured dynamically and receive addresses from DHCP. Servers, network devices, and the management workstation will be configured statically. These devices are static because other devices must reach them
-at a consistent IP address.
+at a consistent IP address. 
 
 Each VLAN has three addresses at the core layer. One SVI on L3-Multilayer-SW1, one SVI on L3-Multilayer-SW2, and one HSRP virtual IP that acts as the default gateway for all devices on that VLAN. End devices and servers must use the HSRP virtual IP as their default gateway, not the
 switch SVI addresses. If the active switch fails, HSRP automatically changes the virtual IP to the standby switch and traffic continues.
