@@ -131,6 +131,9 @@ To confirm that this worked, log out of the switch and before you enter your pas
 For security purposes, unused ports are administratively shut down and put into an unused VLAN so unauthorized devices cannot gain access from that unused port. This is applied to each unused port on each switch.
 
 **Create the black hole VLAN:**
+
+Create this vlan on every switch.
+
 ```
 vlan 999
 name BLACK-HOLE
@@ -140,7 +143,9 @@ exit
 
 **Putting the unused ports into the black hole VLAN and shut them down:**
 
-Identify which ports are not being used and include them. For the example, we are using Gi0/2 and Gi0/3 so the range will be 0/2-3.
+**Note:** We will remove vlan 999 from the allowed vlan list in section 04.
+
+Identify which ports are not being used and include them. For the example, we are using Gi0/2 and Gi0/3 so the range will be 0/2-3. APPLY THIS TO EVERY UNUSED PORT ON EVERY SWITCH.
 ```
 interface range GigabitEthernet0/2-3
 switchport mode access
@@ -149,7 +154,8 @@ shutdown
 exit
 do write
 ```
-**Note:** We will remove vlan 999 from the allowed vlan list in section 04.
+**Note:** For L3-Multilayer-SW1, the unused ports we shut down are: Gi0/2, Gi0/3, Gi1/2, Gi1/3, Gi2/1, Gi2/2, Gi2/3, Gi3/2.
+
 
 ![](images/shutdownportsimg.PNG)
 
