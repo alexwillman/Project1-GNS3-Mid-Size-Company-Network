@@ -101,7 +101,6 @@ no shutdown
 exit
 do write
 ```
-**Note:** Since we updated the native vlan on this side of the link, the error from before will be updated on each switch and STP will unblock the port on both sides. You can see the port consistency restored message in the image below after setting the native VLAN.
 
 ![](images/L2SW1singletrunkportsimg.PNG)
 
@@ -120,6 +119,7 @@ no shutdown
 exit
 do write
 ```
+**Note:** Since we updated the native vlan on both L3-Multilayer-SW1 Gi2/0 and L2-SW3 Gi2/0, the error from before will clear on each switch and STP will unblock the port on both sides. You can see the port consistency restored message in the image below after setting the native VLAN.
 
 ![](images/L2SW3singletrunkportsimg.PNG)
 
@@ -140,7 +140,8 @@ Verify:
 
 ![](images/verifysingletrunkportsimg.PNG)
 
-**Common Problems:**
+### Common Trunk Port Problems:
+
 | Problem | Fix | 
 |---------|-----|
 | Active VLANs are missing from allowed list | Run "switchport trunk allowed vlan add [vlan id]" on the affected interface |
@@ -233,9 +234,16 @@ Verify the administrative mode shows static access and the access mode VLAN show
 
 ![](images/verifyaccessportsshinterface.PNG)
 
+### Common Access Port Problems
+
+| Problem | Fix |
+|---------|-----|
+| Access port is not coming up | Rerun "No shutdown" on the affected interface |
+| Access port is not in the correct VLAN | Rerun "switchport access vlan [id]" on the affected interface |
+
 ## Configuring Port Security
 
-Port security is configured on all access ports to prevent unauthorized devices from connecting to the network. For this lab, each access port will allow a maximum of one MAC address, since only one device is connected. If a port security violation occurs, the port will shut down immediately. Sticky MAC automatically records the MAC address of the connected device when it first communicates.
+Port security is configured on all access ports to prevent unauthorized devices from connecting to the network. For this lab, each access port will allow a maximum of one MAC address, since only one device is connected. If a port security violation occurs, the port will shut down immediately. Sticky MAC automatically records the MAC address of the connected device when it first sends traffic.
 
 Only apply to the access ports.
 
@@ -331,10 +339,20 @@ show port-security address
 
 **Note:** Since the devices have not sent traffic, there will be no MAC addresses captured yet.
 
+### Common Port Security Problems:
+
+| Problem | Fix |
+|---------|-----|
+| Port security is not getting applied | Verify port is in access mode first as port security only works on access ports |
+| Multiple MAC addresses showing on a port configured for maximum 1 | Port security is not enabled. Rerun "switchport port-security" on the affected interface |
+| Port shows secure-down instead of secure-up | The port may be administratively shut down. Bring it back up with "no shutdown" | 
+
 ### Port shutting down from a violation
 
-If a port shuts down from a violation, you must manually bring it back up. To do this, run:
+A port shutdown from a violation enters err-disabled state because the switch disabled it automatically as a security response. It will not come back up on its own, you must manually bring it back up. To do this, run:
 ```
+enable
+configure terminal
 interface Gi[affected port]
 shutdown
 no shutdown
