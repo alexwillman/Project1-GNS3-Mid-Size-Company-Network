@@ -124,7 +124,7 @@ do write
 ![](images/L2SW3singletrunkportsimg.PNG)
 
 
-### Verify Trunk Ports
+### Verify Trunk Ports:
 
 On each switch, use this command to verify information about the trunk ports:
 ```
@@ -215,8 +215,130 @@ do write
 
 ![](images/accessportconfigimgL2SW3.PNG)
 
-### Verify Access Ports
+### Verify Access Ports:
 
+To verify the correct port is in the correct VLAN, you use:
+```
+show vlan brief
+```
+The access ports should be listed under the correct VLAN. For now, the ports used for EtherChannel should be listed in VLAN 1.
 
+![](images/Verifyaccessportsshvlanbri.PNG)
+
+To verify each access port, you use:
+```
+show interfaces [interface] switchport
+```
+Verify the administrative mode shows static access and the access mode VLAN shows the correct VLAN
+
+![](images/verifyaccessportsshinterface.PNG)
+
+## Configuring Port Security
+
+Port security is configured on all access ports to prevent unauthorized devices from connecting to the network. For this lab, each access port will allow a maximum of one MAC address, since only one device is connected. If a port security violation occurs, the port will shut down immediately. Sticky MAC automatically records the MAC address of the connected device when it first communicates.
+
+Only apply to the access ports.
+
+### L2-SW1 Port Security:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+
+interface Gi3/2
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+do write
+```
+
+![](images/portsecurityconfigL2SW1.PNG)
+
+### L2-SW2 Port Security:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+
+interface Gi3/1
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+
+interface Gi3/2
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+do write
+```
+![](images/portsecurityconfigL2SW2.PNG)
+
+### L2-SW3 Port Security:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+
+interface Gi3/2
+switchport port-security
+switchport port-security maximum 1
+switchport port-security mac-address sticky
+switchport port-security violation shutdown
+exit
+do write
+```
+![](images/portsecurityconfigL2SW3.PNG)
+
+### Verify Port Security:
+
+To verify port security status, use
+```
+show port-security
+```
+Verify:
+- Secure port shows the correct access ports
+- Max MAC addresses shows 1
+- Security Action shows Shutdown
+
+![](images/showportsecurityverify.PNG)
+
+To view MAC addresses captured, use
+```
+show port-security address
+```
+![](images/portsecurityaddressverify.PNG)
+
+**Note:** Since the devices have not sent traffic, there will be no MAC addresses captured yet.
+
+### Port shutting down from a violation
+
+If a port shuts down from a violation, you must manually bring it back up. To do this, run:
+```
+interface Gi[affected port]
+shutdown
+no shutdown
+exit
+```
 
 
