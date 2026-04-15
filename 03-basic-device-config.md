@@ -145,23 +145,39 @@ exit
 
 **Note:** We will remove vlan 999 from the allowed vlan list in section 04.
 
-Identify which ports are not being used and include them. For the example, we are using Gi0/2 and Gi0/3 so the range will be 0/2-3. APPLY THIS TO EVERY UNUSED PORT ON EVERY SWITCH.
+Identify which ports are not being used and include them. For L3-Multilayer-SW1, the unused ports we shut down are: Gi0/2, Gi0/3, Gi1/2, Gi1/3, Gi2/1, Gi2/2, Gi2/3, Gi3/2. APPLY THIS TO EVERY UNUSED PORT ON EVERY SWITCH.
 ```
 interface range GigabitEthernet0/2-3
 switchport mode access
 switchport access vlan 999
 shutdown
 exit
+
+interface range GigabitEthernet1/2-3
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface range GigabitEthernet2/1-3
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
+
+interface GigabitEthernet3/2
+switchport mode access
+switchport access vlan 999
+shutdown
+exit
 do write
 ```
-**Note:** For L3-Multilayer-SW1, the unused ports we shut down are: Gi0/2, Gi0/3, Gi1/2, Gi1/3, Gi2/1, Gi2/2, Gi2/3, Gi3/2.
-
 
 ![](images/shutdownportsimg.PNG)
 
 ## Verification
 
-After completing the commands above, you must verify that the configuration was applied correctly.
+After completing the commands in this section, you must verify that the configuration was applied correctly.
 
 **Verify general configs:**
 
