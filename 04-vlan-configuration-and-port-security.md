@@ -12,6 +12,7 @@ Apply to each switch.
 
 **Commands:**
 ```
+enable
 configure terminal
 vlan 10
 name HR
@@ -69,6 +70,7 @@ do write
 
 ### L3-Multilayer-SW2 Single Trunk Ports:
 ```
+enable
 configure terminal
 interface Gi1/0
 switchport trunk encapsulation dot1q
@@ -86,6 +88,7 @@ do write
 
 ### L2-SW1 Single Trunk Ports:
 ```
+enable
 configure terminal
 interface Gi1/0
 switchport trunk encapsulation dot1q
@@ -104,6 +107,7 @@ do write
 
 ### L2-SW3 Single Trunk Ports:
 ```
+enable
 configure terminal
 interface Gi2/0
 switchport trunk encapsulation dot1q
@@ -120,7 +124,7 @@ do write
 ![](images/L2SW3singletrunkportsimg.PNG)
 
 
-### Verify trunk ports
+### Verify Trunk Ports
 
 On each switch, use this command to verify information about the trunk ports:
 ```
@@ -142,5 +146,77 @@ Verify:
 | Active VLANs are missing from allowed list | Run "switchport trunk allowed vlan add [vlan id]" on the affected interface |
 | VLAN 1 or 999 is in the allowed list | Run "switchport trunk allowed vlan remove 1" and "switchport trunk allowed vlan remove 999" on the affected interface |
 | Status does not show trunking | Verify encapsulation is set to dot1q using "show interfaces [interface] switchport". If not, rerun "switchport trunk encapsulation dot1q" and then "switchport mode trunk" on that interface |
+
+## Configuring Access Ports
+
+Access ports connect the end devices and servers to the network. Each interface that faces the end devices and servers is configured as an access port and assigned the VLAN of the department/server it is connected to. These are only applied to the layer 2 access switches.
+
+### L2-SW1 Access Ports:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport mode access
+switchport access vlan 10
+no shutdown
+exit
+
+interface Gi3/2
+switchport mode access
+switchport access vlan 20
+no shutdown
+exit
+do write
+```
+![](images/accessportconfigimgL2SW1.PNG)
+
+### L2-SW2 Access Ports:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport mode access
+switchport access vlan 30
+no shutdown
+exit
+
+interface Gi3/2
+switchport mode access
+switchport access vlan 40
+no shutdown
+exit
+
+interface Gi3/1
+switchport mode access
+switchport access vlan 99
+no shutdown
+exit
+do write
+```
+![](images/accessportconfigimgL2SW2.PNG)
+
+### L2-SW3 Access Ports:
+```
+enable
+configure terminal
+interface Gi3/0
+switchport mode access
+switchport access vlan 50
+no shutdown
+exit
+
+interface Gi3/2
+switchport mode access
+switchport access vlan 60
+no shutdown
+exit
+do write
+```
+
+![](images/accessportconfigimgL2SW3.PNG)
+
+### Verify Access Ports
+
+
 
 
