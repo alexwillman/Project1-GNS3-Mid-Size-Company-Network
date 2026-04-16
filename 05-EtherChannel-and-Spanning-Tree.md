@@ -88,7 +88,7 @@ do write
 ```
 The messages the console sends can clog up the screen so for the example screenshot I will only show the configuration of port-channel 1. Configure port-channel 2 and 3.
 
-![](trunkingportchannelimg1.PNG)
+![](images/trunkingportchannelimg1.PNG)
 
 ### L3-Multilayer-SW2:
 
