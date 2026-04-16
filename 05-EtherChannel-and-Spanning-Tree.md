@@ -294,3 +294,44 @@ exit
 do write
 ```
 ![](images/trunkingportchannelimg6.PNG)
+
+### Verify EtherChannel Configuration
+
+To verify the EtherChannel bundles are working, run:
+```
+show etherchannel summary
+```
+The output should show:
+- The correct ports in each group
+- Protocol is LACP
+- The flags show P on each port. This means it is bundled in the port-channel
+- Port-channel flags show SU. S means layer 2 and U means in use
+
+L3-Multilayer-SW1 EtherChannel summary:
+
+![](images/showetherchannelsummaryimg.PNG)
+
+You can also use:
+```
+show interfaces port-channel [port channel number] trunk
+```
+The output should show:
+- Mode is on
+- Native VLAN is 666
+- Allowed VLANs are correct for that bundle
+- the status is trunking
+
+L3-Multilayer-SW1 show interfaces port-channel 1 trunk:
+
+![](images/showintportchanneltrunk.PNG)
+
+### Common Problems
+
+| Problem | Fix |
+|---------|-----|
+| Port-channel not forming | Verify both sides have matching channel-group numbers and at least one side is active. Run "show etherchannel summary" to check flags |
+| LACP bundle not negotiating | Both sides may be set to passive. At least one side must be active. Change one of the sides to active. |
+| Port showing D flag | Port is down. Run "no shutdown" on the affected port |
+
+## Configuring Spanning Tree
+
