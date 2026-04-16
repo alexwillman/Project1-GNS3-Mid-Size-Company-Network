@@ -335,3 +335,7 @@ L3-Multilayer-SW1 show interfaces port-channel 1 trunk:
 
 ## Configuring Spanning Tree
 
+Rapid PVST+ runs a separate spanning tree instance per VLAN. The root bridge is set by configuring a lower STP priority on the switch that should be the root for each VLAN. A lower priority wins the root bridge election. The default STP priority on Cisco switches is 32768 so setting the core switches to 4096 for primary and 8192 for secondary, they will always win the root bridge election.
+
+The STP root bridge assignments match the HSRP active gateway assignments for each VLAN group. This ensures traffic from access switches always flows up to the correct core switch. STP will block the standby links on the access switches for the non primary VLANs. If a core switch goes down, Rapid PVST+ will quickly unblock the standby link so that traffic can reach the other switch.
+
