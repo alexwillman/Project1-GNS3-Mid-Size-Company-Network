@@ -267,6 +267,7 @@ interface range GigabitEthernet1/0-1
 exit
 ```
 Creating channel group 5:
+
 ![](images/createchannelgroupimg6.PNG)
 
 **Trunking the port channels:**
