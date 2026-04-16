@@ -243,9 +243,11 @@ do write
 **Note:** Po6 is the only bundle with a limited allowed VLAN list, VLANs 40, 50, 60, 99, and 666. This link is specifically for IT department to server communication. Other departments are not included because this link only carries traffic between the IT department and servers.
 
 Port-channel 3 and 4:
+
 ![](images/trunkingportchannelimg4.PNG)
 
 Port-channel 6:
+
 ![](images/trunkingportchannelimg5.PNG)
 
 ### L2-SW3
