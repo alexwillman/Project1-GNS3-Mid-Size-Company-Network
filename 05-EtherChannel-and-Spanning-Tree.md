@@ -1,7 +1,7 @@
 # EtherChannel and Spanning Tree Configuration
 
 This section covers the EtherChannel and Spanning Tree configuration for all five switches. EtherChannel bundles multiple physical links into one logical link to provide increased bandwidth. Spanning Tree Protocol (STP) prevents layer 2 loops in the network by blocking paths on redundant links.
-Since this network has multiple links to each switch, we will need to implement STP.
+Since this network has multiple links to each switch, we will need to implement STP. We will also be configuring PortFast and BPDU guard.
 
 EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports. 
 
@@ -338,4 +338,106 @@ L3-Multilayer-SW1 show interfaces port-channel 1 trunk:
 Rapid PVST+ runs a separate spanning tree instance per VLAN. The root bridge is set by configuring a lower STP priority on the switch that should be the root for each VLAN. A lower priority wins the root bridge election. The default STP priority on Cisco switches is 32768 so setting the core switches to 4096 for primary and 8192 for secondary, they will always win the root bridge election.
 
 The STP root bridge assignments match the HSRP active gateway assignments for each VLAN group. This ensures traffic from access switches always flows up to the correct core switch. STP will block the standby links on the access switches for the non primary VLANs. If a core switch goes down, Rapid PVST+ will quickly unblock the standby link so that traffic can reach the other switch.
+
+### Enabling Rapid PVST+
+
+Rapid PVST+ must be enabled on all five switches before setting root bridge priorites.
+
+```
+enable
+configure terminal
+spanning-tree mode rapid-pvst
+do write
+end
+
+show spanning-tree summary
+```
+In show spanning-tree summary, the first line should say switch is in rapid-pvst mode.
+
+![](images/rapidpvstconfigimg.PNG)
+
+*Configure Rapid PVST for all five switches.*
+
+### Setting Root Bridge Priorities
+
+The root bridge priorities only need to be configured on the core switches because the access switches will use the default of 32768.
+
+| Switch | Primary Root VLANs | Secondary Root VLANs |
+|--------|--------------------|----------------------|
+| L3-Multilayer-SW1 | 10,20,30,99 | 40,50,60 |
+| L3-Multilayer-SW2 | 40,50,60 | 10,20,30,99 |
+
+**L3-Multilayer-SW1:**
+```
+enable
+configure terminal
+spanning-tree vlan 10,20,30,99 priority 4096
+spanning-tree vlan 40,50,60 priority 8192
+exit
+write
+```
+
+![](images/rootbridgeL3MultiSW1.PNG)
+
+**L3-Multilayer-SW2:**
+```
+enable
+configure terminal
+spanning-tree vlan 40,50,60 priority 4096
+spanning-tree vlan 10,20,30,99 priority 8192
+exit
+write
+```
+
+![](images/rootbridgeL3MultiSW2.PNG)
+
+**Verify Root Bridge**
+
+To verify the root bridges are confirmed, run:
+```
+show spanning-tree summary
+```
+L3-Multilayer-SW1 should show the root bridge for:
+
+![](images/verifyrootbridgeimg.PNG)
+
+L3-Multilayer-SW2 should show the root bridge for:
+
+![](images/verifyrootbridgeimg2.PNG)
+
+### Configure PortFast and BPDU Guard
+
+PortFast improves the connection speed by skipping the STP listening and learning states so end devices get access to the network immediately. BPDU Guard protects PortFast enabled ports by shutting down the port and placing it into an err-disabled state if an unexpected BPDU is received. This prevents someone from plugging a switch into a port and disrupting STP.
+
+**Do not configure PortFast or BPDU Guard on trunk ports or EtherChannel ports. Only configure them on access ports facing end devices.**
+
+Configure PortFast and BPDU Guard on each access port on L2-SW1, L2-SW2, and L2-SW3. The example will only show the configuration of L2-SW1.
+
+**L2-SW1:**
+```
+enable
+configure terminal
+interface Gi3/0 
+spanning-tree portfast
+spanning-tree bpduguard enable
+exit
+
+interface Gi3/2
+spanning-tree portfast
+spanning-tree bpduguard enable
+exit
+do write
+```
+
+![](images/portfastbpduguardimg.PNG)
+
+**Verify PortFast and BPDU Guard**
+
+On each access switch, run:
+```
+show running-config
+```
+Under the access port interfaces, it should show spanning-tree portfast edge and spanning-tree bpduguard enable. The example output is for L2-SW1.
+
+![](images/verifyportfastbpduguardimg.PNG)
 
