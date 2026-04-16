@@ -45,7 +45,7 @@ no shutdown
 exit
 
 interface range Gi1/0-1
-channel group 3 mode active
+channel-group 3 mode active
 no shutdown
 exit
 ```
@@ -293,6 +293,8 @@ no shutdown
 exit
 do write
 ```
+**Note:** Po6 is the only bundle with a limited allowed VLAN list, VLANs 40, 50, 60, 99, and 666. This link is specifically for IT department to server communication. Other departments are not included because this link only carries traffic between the IT department and servers.
+
 ![](images/trunkingportchannelimg6.PNG)
 
 ### Verify EtherChannel Configuration
@@ -347,8 +349,8 @@ Rapid PVST+ must be enabled on all five switches before setting root bridge prio
 enable
 configure terminal
 spanning-tree mode rapid-pvst
-do write
 end
+do write
 
 show spanning-tree summary
 ```
@@ -397,13 +399,24 @@ To verify the root bridges are confirmed, run:
 ```
 show spanning-tree summary
 ```
-L3-Multilayer-SW1 should show the root bridge for:
+L3-Multilayer-SW1 should show the root bridge for 1,10,20,30,99,666:
 
 ![](images/verifyrootbridgeimg.PNG)
 
-L3-Multilayer-SW2 should show the root bridge for:
+L3-Multilayer-SW2 should show the root bridge for 1,40,50,60:
 
 ![](images/verifyrootbridgeimg2.PNG)
+
+You can also verify the correct root bridge, correct priority values, and correct ports are forwarding and blocking for each vlan using:
+
+```
+show spanning-tree
+```
+
+Example L3-Multilayer-SW1:
+
+![](images/showspanningtree1.PNG)
+![](images/showspanningtree2.PNG)
 
 ### Configure PortFast and BPDU Guard
 
@@ -437,7 +450,7 @@ On each access switch, run:
 ```
 show running-config
 ```
-Under the access port interfaces, it should show spanning-tree portfast edge and spanning-tree bpduguard enable. The example output is for L2-SW1.
+Under each access port interface, it should show spanning-tree portfast edge and spanning-tree bpduguard enable. The example output is for L2-SW1.
 
 ![](images/verifyportfastbpduguardimg.PNG)
 
