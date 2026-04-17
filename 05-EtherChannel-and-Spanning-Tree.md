@@ -1,13 +1,13 @@
 # EtherChannel and Spanning Tree Configuration
 
-This section covers the EtherChannel and Spanning Tree configuration for all five switches. EtherChannel bundles multiple physical links into one logical link to provide increased bandwidth. Spanning Tree Protocol (STP) prevents layer 2 loops in the network by blocking paths on redundant links.
+This section covers the EtherChannel and Spanning Tree configuration for all five switches. EtherChannel is the bundling of multiple physical links into one logical link to provide increased bandwidth. Spanning Tree Protocol (STP) prevents layer 2 loops in the network by blocking paths on redundant links.
 Since this network has multiple links to each switch, we will need to implement STP. We will also be configuring PortFast and BPDU guard.
 
 EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports. 
 
 ## EtherChannel Bundles List
 
-All six EtherChannel bundles use LACP (Link Aggregation Control Protocol). LACP is the protocol that negotiates the bundle between two switches. One side of the link is active and the other is passive. Active initiates the negotiation and passive responds to it so at least one side must be active for the bundle to form.
+All six EtherChannel bundles use LACP (Link Aggregation Control Protocol). LACP is the protocol that negotiates the bundle between two switches. One side of the link is active and the other is passive. Active initiates the negotiation and passive responds to it, so at least one side must be active for the bundle to form.
 
 | Bundle | Device A | Interfaces | Device B | Interfaces | Purpose |
 |--------|----------|------------|----------|------------|---------|
@@ -28,7 +28,7 @@ The channel-group number on each end of a bundle must match. If the numbers do n
 
 ### L3-Multilayer-SW1:
 
-**Note:** The port-channel/channel-group number with the device and interfaces is listed in the table above as Po1, Po2, etc.
+**Note:** The port-channel/channel-group number with the device and interfaces is listed in the table above as Po1, Po2, etc. Use that table to create the channel-groups.
 
 **Creating the channel groups:**
 ```
@@ -112,7 +112,7 @@ channel-group 5 mode active
 no shutdown
 exit
 ```
-Again, the native vlan mismatch messages will clog up the screen so the example screenshot will only show creation of channel group 4 and 5.
+Again, the messages will clog up the screen so the example screenshot will only show creation of channel group 4 and 5.
 
 ![](images/createchannelgroupimg2.PNG)
 
