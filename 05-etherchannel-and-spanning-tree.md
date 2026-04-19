@@ -3,7 +3,7 @@
 This section covers the EtherChannel and Spanning Tree configuration for all five switches. EtherChannel is the bundling of multiple physical links into one logical link to provide increased bandwidth. Spanning Tree Protocol (STP) prevents layer 2 loops in the network by blocking paths on redundant links.
 Since this network has multiple links to each switch, we will need to implement STP. We will also be configuring PortFast and BPDU guard.
 
-EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports. 
+EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports.  
 
 ## EtherChannel Bundles List
 
