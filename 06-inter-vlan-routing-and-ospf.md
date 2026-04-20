@@ -251,22 +251,146 @@ show running-config
 
 ## Configuring OSPF on Layer 3 Switches
 
-OSPF is configured on both Layer 3 switches to provide dynamic routing across the network. We will manually configure a router ID so that OSPF always uses a stable identifier in case of an interface failure and there is no disruption. We will also set the network type to point-to-point on the pfSense uplinks to prevent Designated Router/Backup Designated Router election. Since there is only two devices there is no need for a DR/BDR. Additionally, we will configure passive interfaces on the department VLANs to prevent hello messages from being sent toward those devices. We will use a single area (area 0) to keep simplicity for the network.
+OSPF is configured on both Layer 3 switches to provide dynamic routing across the network. OSPF is configured with the network addresses of each subnet the switch is directly connected to. This tells OSPF which interfaces to activate on and which networks to advertise to neighboring routers. Since this is a single site network we will keep these in the same area (area 0). We will manually configure a router ID so that OSPF always uses a stable identifier in case of an interface failure. We will also set the network type to point-to-point on the pfSense uplinks to prevent Designated Router/Backup Designated Router election. Since there are only two devices there is no need for a DR/BDR. Additionally, we will configure passive interfaces on the department VLANs to prevent hello messages from being sent toward those devices.
 
-The peer link between L3-Multilayer-SW1 and L3-Multilayer-SW2 is a layer 2 EtherChannel trunk and OSPF cannot run on layer 2 so the adjacency will form over the VLAN 99 SVI. This means no network statement is needed for the peer link.
+The peer link between L3-Multilayer-SW1 and L3-Multilayer-SW2 is a layer 2 EtherChannel trunk and OSPF cannot run on layer 2 so the adjacency will form over the VLAN 99 SVI. This means no network statement is needed for the peer link. This is also why Vlan99 is not in the passive-interface list.
 
+**Note:** OSPF uses wildcard masks instead of subnet masks in its configuration. The wildcard mask is the inverse of the subnet mask. The subnet masks we are using and their matching wildcard mask is listed below.
+
+| Subnet Mask | Wildcard Mask |
+|-------------|---------------|
+| 255.255.255.0 | 0.0.0.255 |
+| 255.255.255.128 | 0.0.0.127 |
+| 255.255.255.252 | 0.0.0.3 |
 
 ### L3-Multilayer-SW1
-
 ```
 enable
 configure terminal
 router ospf 1
 router-id 1.1.1.1
+network 10.0.0.0 0.0.0.3 area 0
+network 192.168.0.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
+network 192.168.2.0 0.0.0.255 area 0
+network 192.168.3.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.0.127 area 0
+network 172.16.0.128 0.0.0.127 area 0
+network 192.168.99.0 0.0.0.255 area 0
+passive-interface Vlan10
+passive-interface Vlan20
+passive-interface Vlan30
+passive-interface Vlan40
+passive-interface Vlan50
+passive-interface Vlan60
+exit
 
+interface Gi3/3
+ip ospf network point-to-point
+exit
+do write
+```
+![](images/ospfconfigimg1.PNG)
 
+### L3-Multilayer-SW2
+```
+enable
+configure terminal
+router ospf 1
+router-id 2.2.2.2
+network 10.0.0.4 0.0.0.3 area 0
+network 192.168.0.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
+network 192.168.2.0 0.0.0.255 area 0
+network 192.168.3.0 0.0.0.255 area 0
+network 172.16.0.0 0.0.0.127 area 0
+network 172.16.0.128 0.0.0.127 area 0
+network 192.168.99.0 0.0.0.255 area 0
+passive-interface Vlan10
+passive-interface Vlan20
+passive-interface Vlan30
+passive-interface Vlan40
+passive-interface Vlan50
+passive-interface Vlan60
+exit
 
+interface Gi3/2
+ip ospf network point-to-point
+exit
+do write
+```
+![](images/ospfconfigimg2.PNG)
 
+### Verify OSPF Configuration
+
+- To verify the process ID, area, IP address, and neighbor, run:
+```
+show ip ospf interface brief
+```
+**Note:** VLAN 99 should show 1 neighbor on each switch.
+
+<br>
+
+- To verify the ospf route has been learned by the other switch, run:
+```
+show ip route ospf
+```
+**Note:** For now, each switch should only have one route learned, which is the point-to-point network on the other switch. Additional routes will show when pfSense forms adjacency with the switches in Section 08.
+
+<br>
+
+- To verify the correct neighbor ID and that it is forming adjacency between the core switches over VLAN 99, run:
+```
+show ip ospf neighbor
+```
+
+**L3-Multilayer-SW1 Verification:**
+
+![](images/verifyospfimg1.PNG)
+
+**L3-Multilayer-SW2 Verification:**
+
+![](images/verifyospfimg2.PNG)
+
+Before we move on to ping tests, you can also verify that each connected network appears in the routing table and is correct by running:
+```
+show ip route connected
+```
+Both Layer 3 switches have SVIs configured for every VLAN because both switches need an IP address on each VLAN to act as the active and standby HSRP gateways. You should see a C entry for each directly connected subnet and an L entry for the switch's own IP address on that interface. This includes all department VLANs, server VLANs, the management VLAN, and the point-to-point link to pfSense.
+
+**L3-Multilayer-SW1 Connected Networks:**
+
+![](images/verifyconnectednetworkimg1.PNG)
+
+**L3-Multilayer-SW2 Connected Networks:**
+
+![](images/verifyconnectednetworkimg2.PNG)
+
+<br>
+
+## Ping Testing Verification
+
+We will verify connectivity between devices using ping tests.
+
+### L3-Multilayer-SW1
+
+**Ping L3-Multilayer-SW2 VLAN 99 SVI:**
+```
+enable
+
+ping 192.168.99.3
+```
+A successful ping confirms the OSPF adjacency across the peer link through VLAN 99.
+
+![](images/pingtestimg1.PNG)
+
+**Ping L3-Multilayer-SW2 VLAN 10 SVI:**
+```
+ping 192.168.0.3
+```
+A successful ping confirms department VLAN routing. It is expected for the first ping to drop due to ARP resolution.
+
+![](images/pingtestimg2.PNG)
 
 
 
