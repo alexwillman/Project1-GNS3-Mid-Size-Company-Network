@@ -1,6 +1,6 @@
 # Inter-VLAN Routing and OSPF
 
-This section covers the layer 3 configuration in the network and how communication is provided between VLANs and devices in the network. This includes enabling IP routing on the core switches to let them operate as layer 3 devices, setting interfaces for the uplinks to the pfSense firewall, configuring SVIs for each VLAN, configuring management SVIs, and configuring OSPF for routing across the network. Basic connectivity between devices will be verified in this section.
+This section covers the layer 3 configuration in the network and how communication is provided between VLANs and devices in the network. This includes enabling IP routing on the core switches to let them operate as layer 3 devices, setting interfaces for the uplinks to the pfSense firewall, configuring SVIs for each VLAN, configuring management SVIs, and configuring OSPF for routing across the network. Basic connectivity between devices will be verified in this section. The end will list common problems when configuring this section.
 
 <br>
 
@@ -372,12 +372,15 @@ Both Layer 3 switches have SVIs configured for every VLAN because both switches 
 
 We will verify connectivity between devices using ping tests.
 
+<br>
+
 ### L3-Multilayer-SW1
+---
+
+<br>
 
 **Ping L3-Multilayer-SW2 VLAN 99 SVI:**
 ```
-enable
-
 ping 192.168.99.3
 ```
 A successful ping confirms the OSPF adjacency across the peer link through VLAN 99.
@@ -392,5 +395,49 @@ A successful ping confirms department VLAN routing. It is expected for the first
 
 ![](images/pingtestimg2.PNG)
 
+**Ping L3-Multilayer-SW2 VLAN 50 SVI:**
+```
+ping 172.16.0.3
+```
+A successful ping confirms server VLAN routing.
 
+![](images/pingtestimg3.PNG)
 
+**Ping L2-SW1, L2-SW2, L2-SW3 VLAN 99:**
+```
+ping 192.168.99.4
+ping 192.168.99.5
+ping 192.168.99.6
+```
+A successful ping will confirm management interfaces are up and VLAN 99 traffic is forwarding correctly across all trunk links.
+
+![](images/pingtestimg4.PNG)
+
+### L3-Multilayer-SW2
+---
+
+**Ping L3-Multilayer-SW1 SVIs:**
+```
+ping 192.168.99.2
+ping 192.168.1.2
+ping 192.168.2.2
+ping 192.168.3.2
+ping 172.16.0.2
+ping 172.16.0.130
+```
+A sucessful ping on each will confirm all VLAN SVIs are reachable on L3-Multilayer-SW1.
+
+![](images/pingtestimg5.PNG)
+
+<br>
+
+## Common Problems
+
+| Problem | Fix |
+|---------|-----|
+| ip routing command not available | IOSvL2 might have it enabled already. Verify a routing table exists with 'show ip route'. If it does not exist try rerunning 'ip routing'. |
+| Ping between layer 3 switches failing | Run 'show ip interface brief' and bring up any down SVI using 'no shutdown'. Run 'show interfaces trunk' and confirm the correct VLANs are allowed on Po1. If any are missing add it using 'switchport trunk allowed vlan add [id]' on the Po1 interface. |
+| OSPF neighbors not forming | Verify VLAN 99 SVIs are up on both switches using 'show ip interface brief'. If they are down bring them up using 'no shutdown' on the Vlan99 interface. If the SVI is up but neighbors do not form verify the VLAN 99 network statement exists in 'show running-config' on both switches. If one is missing add it with 'router ospf 1' then 'network 192.168.99.0 0.0.0.255 area 0' on the affected switch. |
+| Routed interface showing as switchport | The 'no switchport' command was not applied. Rerun the command on the affected interface. |
+| Ping from L3 switch to L2 switch management SVI failing | Verify the VLAN 99 SVI is up on the L2 switch with 'show ip interface brief'. If it is down run 'no shutdown' on the Vlan99 interface. Verify the IP address is correct and update it if not by running 'interface Vlan99' and then 'ip address [correct ip] [subnet mask]. |
+| Ping succeeds from L3-Multilayer-SW1 to L3-Multilayer-SW2 but not the reverse | Verify the SVI IP address is correct on L3-Multilayer-SW2 with 'show ip interface brief'. If an IP address is wrong use 'interface Vlan[id]' to go into the affected interface and rerun 'ip address [correct ip] [subnet mask]'. |
