@@ -171,7 +171,7 @@ do write
 
 ### Verify SVIs
 
-To verify the SVIs were sucessfully created and assigned an IP address, use:
+To verify the SVIs were successfully created and assigned an IP address, use:
 ```
 show ip interface brief
 ```
@@ -370,7 +370,7 @@ Both Layer 3 switches have SVIs configured for every VLAN because both switches 
 
 ## Ping Testing Verification
 
-We will verify connectivity between devices using ping tests.
+We will verify connectivity between devices using ping tests. For most of these pings it is expected for the first ping to drop due to ARP resolution.
 
 <br>
 
@@ -391,7 +391,7 @@ A successful ping confirms the OSPF adjacency across the peer link through VLAN 
 ```
 ping 192.168.0.3
 ```
-A successful ping confirms department VLAN routing. It is expected for the first ping to drop due to ARP resolution.
+A successful ping confirms department VLAN routing.
 
 ![](images/pingtestimg2.PNG)
 
@@ -425,7 +425,7 @@ ping 192.168.3.2
 ping 172.16.0.2
 ping 172.16.0.130
 ```
-A sucessful ping on each will confirm all VLAN SVIs are reachable on L3-Multilayer-SW1.
+A successful ping on each will confirm all VLAN SVIs are reachable on L3-Multilayer-SW1.
 
 ![](images/pingtestimg5.PNG)
 
@@ -439,5 +439,5 @@ A sucessful ping on each will confirm all VLAN SVIs are reachable on L3-Multilay
 | Ping between layer 3 switches failing | Run 'show ip interface brief' and bring up any down SVI using 'no shutdown'. Run 'show interfaces trunk' and confirm the correct VLANs are allowed on Po1. If any are missing add it using 'switchport trunk allowed vlan add [id]' on the Po1 interface. |
 | OSPF neighbors not forming | Verify VLAN 99 SVIs are up on both switches using 'show ip interface brief'. If they are down bring them up using 'no shutdown' on the Vlan99 interface. If the SVI is up but neighbors do not form verify the VLAN 99 network statement exists in 'show running-config' on both switches. If one is missing add it with 'router ospf 1' then 'network 192.168.99.0 0.0.0.255 area 0' on the affected switch. |
 | Routed interface showing as switchport | The 'no switchport' command was not applied. Rerun the command on the affected interface. |
-| Ping from L3 switch to L2 switch management SVI failing | Verify the VLAN 99 SVI is up on the L2 switch with 'show ip interface brief'. If it is down run 'no shutdown' on the Vlan99 interface. Verify the IP address is correct and update it if not by running 'interface Vlan99' and then 'ip address [correct ip] [subnet mask]. |
+| Ping from L3 switch to L2 switch management SVI failing | Verify the VLAN 99 SVI is up on the L2 switch with 'show ip interface brief'. If it is down run 'no shutdown' on the Vlan99 interface. Verify the IP address is correct and update it if not by running 'interface Vlan99' and then 'ip address [correct ip] [subnet mask]'. |
 | Ping succeeds from L3-Multilayer-SW1 to L3-Multilayer-SW2 but not the reverse | Verify the SVI IP address is correct on L3-Multilayer-SW2 with 'show ip interface brief'. If an IP address is wrong use 'interface Vlan[id]' to go into the affected interface and rerun 'ip address [correct ip] [subnet mask]'. |
