@@ -206,4 +206,67 @@ do write
 ```
 ![](images/ManagementSVIconfigimg1.PNG)
 
+### L2-SW2
+```
+enable
+configure terminal
+interface Vlan99
+description Management VLAN 99
+ip address 192.168.99.5 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.99.1
+do write
+```
+![](images/ManagementSVIconfigimg2.PNG)
+
+### L2-SW3
+```
+enable
+configure terminal
+interface Vlan99
+description Management VLAN 99
+ip address 192.168.99.6 255.255.255.0
+no shutdown
+exit
+ip default-gateway 192.168.99.1
+do write
+```
+![](images/ManagementSVIconfigimg3.PNG)
+
+### Verify Management SVIs
+
+To verify management SVI creation on each switch, use:
+```
+show ip interface brief
+```
+and
+```
+show running-config
+```
+- Vlan99 should show the status and protocol 'up'.
+- Interface Vlan99 should show the correct IP and default gateway.
+
+<br>
+
+## Configuring OSPF on Layer 3 Switches
+
+OSPF is configured on both Layer 3 switches to provide dynamic routing across the network. We will manually configure a router ID so that OSPF always uses a stable identifier in case of an interface failure and there is no disruption. We will also set the network type to point-to-point on the pfSense uplinks to prevent Designated Router/Backup Designated Router election. Since there is only two devices there is no need for a DR/BDR. Additionally, we will configure passive interfaces on the department VLANs to prevent hello messages from being sent toward those devices. We will use a single area (area 0) to keep simplicity for the network.
+
+The peer link between L3-Multilayer-SW1 and L3-Multilayer-SW2 is a layer 2 EtherChannel trunk and OSPF cannot run on layer 2 so the adjacency will form over the VLAN 99 SVI. This means no network statement is needed for the peer link.
+
+
+### L3-Multilayer-SW1
+
+```
+enable
+configure terminal
+router ospf 1
+router-id 1.1.1.1
+
+
+
+
+
+
 
