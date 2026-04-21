@@ -26,6 +26,7 @@ The hostname is configured on each device to ensure you know which device you ar
 ```
 enable
 configure terminal
+
 hostname L3-Multilayer-SW1
 exit
 write memory
