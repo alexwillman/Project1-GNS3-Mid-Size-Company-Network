@@ -12,6 +12,7 @@ Apply this to both L3-Multilayer-SW1 and L3-Multilayer-SW2:
 ```
 enable
 configure terminal
+
 ip routing
 exit
 write
@@ -29,6 +30,7 @@ After that you can assign them the IP addresses from the point-to-point section 
 ```
 enable
 configure terminal
+
 interface Gi3/3
 no switchport
 ip address 10.0.0.2 255.255.255.252
@@ -45,6 +47,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi3/2
 no switchport
 ip address 10.0.0.6 255.255.255.252
@@ -77,6 +80,7 @@ Before you configure the SVIs power on each end device/server. This ensures the 
 ```
 enable
 configure terminal
+
 interface Vlan10
 description HR Department VLAN 10 Gateway
 ip address 192.168.0.2 255.255.255.0
@@ -125,6 +129,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Vlan10
 description HR Department VLAN 10 Gateway
 ip address 192.168.0.3 255.255.255.0
@@ -196,6 +201,7 @@ The layer 2 switches will need a VLAN 99 SVI for SSH access to manage the device
 ```
 enable
 configure terminal
+
 interface Vlan99
 description Management VLAN 99
 ip address 192.168.99.4 255.255.255.0
@@ -210,6 +216,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Vlan99
 description Management VLAN 99
 ip address 192.168.99.5 255.255.255.0
@@ -224,6 +231,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Vlan99
 description Management VLAN 99
 ip address 192.168.99.6 255.255.255.0
@@ -267,6 +275,7 @@ The peer link between L3-Multilayer-SW1 and L3-Multilayer-SW2 is a layer 2 Ether
 ```
 enable
 configure terminal
+
 router ospf 1
 router-id 1.1.1.1
 network 10.0.0.0 0.0.0.3 area 0
@@ -296,6 +305,7 @@ do write
 ```
 enable
 configure terminal
+
 router ospf 1
 router-id 2.2.2.2
 network 10.0.0.4 0.0.0.3 area 0
