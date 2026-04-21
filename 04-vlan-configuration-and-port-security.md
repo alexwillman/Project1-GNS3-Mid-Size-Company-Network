@@ -14,6 +14,7 @@ Apply to each switch.
 ```
 enable
 configure terminal
+
 vlan 10
 name HR
 vlan 20
@@ -53,6 +54,7 @@ This section only includes the single link trunk port configuration. The EtherCh
 ```
 enable
 configure terminal
+
 interface Gi2/0
 switchport trunk encapsulation dot1q
 switchport mode trunk
@@ -72,6 +74,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi1/0
 switchport trunk encapsulation dot1q
 switchport mode trunk
@@ -90,6 +93,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi1/0
 switchport trunk encapsulation dot1q
 switchport mode trunk
@@ -108,6 +112,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi2/0
 switchport trunk encapsulation dot1q
 switchport mode trunk
@@ -156,6 +161,7 @@ Access ports connect the end devices and servers to the network. Each interface 
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport mode access
 switchport access vlan 10
@@ -175,6 +181,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport mode access
 switchport access vlan 30
@@ -200,6 +207,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport mode access
 switchport access vlan 50
@@ -251,6 +259,7 @@ Only apply to the access ports.
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport port-security
 switchport port-security maximum 1
@@ -273,6 +282,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport port-security
 switchport port-security maximum 1
@@ -301,6 +311,7 @@ do write
 ```
 enable
 configure terminal
+
 interface Gi3/0
 switchport port-security
 switchport port-security maximum 1
@@ -353,6 +364,7 @@ A port shutdown from a violation enters err-disabled state because the switch di
 ```
 enable
 configure terminal
+
 interface Gi[affected port]
 shutdown
 no shutdown
