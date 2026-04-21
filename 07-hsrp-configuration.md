@@ -177,9 +177,152 @@ L3-Multilayer-SW2 should show:
 
 ## Ping Testing Verification
 
+The VPCS workstations will need to be configured with an IP address and a default gateway for ping testing now that the end devices can use the HSRP virtual IP for their VLAN as their default gateway. They will eventually use DHCP in a later section, but for now we need to statically assign addresses for testing.
 
+### Configure VPCS IPs
 
+**PC1-HR (VLAN 10):**
+```
+ip 192.168.0.10 255.255.255.0 192.168.0.1
+```
 
+**PC2-Sales (VLAN 20):**
+```
+ip 192.168.1.10 255.255.255.0 192.168.1.1
+```
 
+**PC3-Finance (VLAN 30):**
+```
+ip 192.168.2.10 255.255.255.0 192.168.2.1
+```
 
+**PC4-IT (VLAN 40):**
+```
+ip 192.168.3.10 255.255.255.0 192.168.3.1
+```
+
+### Ping Tests
+
+**PC1-HR ping own default gateway:**
+```
+ping 192.168.0.1
+```
+A successful ping shows PC1-HR can reach the HSRP VLAN 10 virtual IP.
+
+![](images/pingtesthsrp1.PNG)
+
+**PC1-HR ping L3-Multilayer-SW2 VLAN 10 SVI:**
+```
+ping 192.168.0.3
+```
+A successful ping shows that inter-VLAN routing is working from end devices.
+
+![](images/pingtesthsrp2.PNG)
+
+**PC2-Sales ping PC3-Finance:**
+```
+ping 192.168.2.10
+```
+A successful ping shows connectivity between department devices in different VLANs.
+
+![](images/pingtesthsrp3.PNG)
+
+**PC4-IT ping own default gateway:**
+```
+ping 192.168.3.1
+```
+A successful ping shows PC4-IT can reach the HSRP VLAN 40 virtual IP active on L3-Multilayer-SW2.
+
+![](images/pingtesthsrp4.PNG)
+
+## HSRP Failover Test
+
+This confirms that HSRP fails over to the standby switch when the active switch goes down.
+
+### Step 1
+
+**Verify the current active switch for VLAN 10**
+
+On L3-Multilayer-SW1, run:
+```
+show standby brief
+```
+L3-Multilayer-SW1 should show as active for VLAN 10.
+
+![](images/failovertestimg1.PNG)
+
+### Step 2
+
+**Ping from PC1-HR to its own default gateway to confirm connectivity**
+```
+ping 192.168.0.1
+```
+
+![](images/failovertestimg2.PNG)
+
+### Step 3
+
+**Turn off L3-Multilayer-SW1 in GNS3**
+```
+left click L3-Multilayer-SW1
+click Stop
+```
+
+### Step 4
+
+**Verify failover on L3-Multilayer-SW2**
+
+On L3-Multilayer-SW2, run:
+```
+show standby brief
+```
+L3-Multilayer-SW2 should now show active for all VLANs.
+
+![](images/failovertestimg3.PNG)
+
+### Step 5
+
+**Ping from PC1-HR to its own default gateway to confirm connectivity after failover**
+```
+ping 192.168.0.1
+```
+Ping should be successful even with L3-Multilayer-SW1 down.
+
+![](images/failovertestimg4.PNG)
+
+### Step 6
+
+**Restart L3-Multilayer-SW1 in GNS3**
+```
+left click L3-Multilayer-SW1
+click Start
+```
+Wait for the device to fully boot.
+
+### Step 7
+
+**Confirm L3-Multilayer-SW1 is active again**
+
+On L3-Multilayer-SW1, run:
+```
+show standby brief
+```
+L3-Multilayer-SW1 should show active for VLANs 10, 20, 30, and 99 again.
+
+![](images/failovertestimg5.PNG)
+
+### Step 8
+
+**Ping from PC1-HR to its own default gateway after L3-Multilayer-SW1 is active again**
+
+```
+ping 192.168.0.1
+```
+Pings should be successful
+
+![](images/failovertestimg6.PNG)
+
+<br>
+
+## Common Problems
 
