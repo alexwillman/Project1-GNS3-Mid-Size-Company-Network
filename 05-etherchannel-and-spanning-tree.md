@@ -34,6 +34,7 @@ The channel-group number on each end of a bundle must match. If the numbers do n
 ```
 enable
 configure terminal
+
 interface range Gi3/0-1
 channel-group 1 mode active
 no shutdown
@@ -97,6 +98,7 @@ The messages the console sends can clog up the screen so for the example screens
 ```
 enable
 configure terminal
+
 interface range Gi3/0-1
 channel-group 1 mode passive
 no shutdown
@@ -159,6 +161,7 @@ The example screenshot will only show port-channel 1 and 4.
 ```
 enable
 configure terminal
+
 interface range Gi0/0-1
 channel-group 2 mode passive
 no shutdown
@@ -189,6 +192,7 @@ do write
 ```
 enable
 configure terminal
+
 interface range GigabitEthernet1/0-1
  channel-group 3 mode passive
  no shutdown
@@ -256,14 +260,15 @@ Port-channel 6:
 ```
 enable
 configure terminal
+
 interface range GigabitEthernet0/0-1
- channel-group 5 mode passive
- no shutdown
+channel-group 5 mode passive
+no shutdown
 exit
 
 interface range GigabitEthernet1/0-1
- channel-group 6 mode passive
- no shutdown
+channel-group 6 mode passive
+no shutdown
 exit
 ```
 Creating channel group 5:
@@ -348,6 +353,7 @@ Rapid PVST+ must be enabled on all five switches before setting root bridge prio
 ```
 enable
 configure terminal
+
 spanning-tree mode rapid-pvst
 end
 do write
@@ -373,6 +379,7 @@ The root bridge priorities only need to be configured on the core switches becau
 ```
 enable
 configure terminal
+
 spanning-tree vlan 10,20,30,99 priority 4096
 spanning-tree vlan 40,50,60 priority 8192
 exit
@@ -385,6 +392,7 @@ write
 ```
 enable
 configure terminal
+
 spanning-tree vlan 40,50,60 priority 4096
 spanning-tree vlan 10,20,30,99 priority 8192
 exit
@@ -430,6 +438,7 @@ Configure PortFast and BPDU Guard on each access port on L2-SW1, L2-SW2, and L2-
 ```
 enable
 configure terminal
+
 interface Gi3/0 
 spanning-tree portfast
 spanning-tree bpduguard enable
