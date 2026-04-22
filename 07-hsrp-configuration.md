@@ -179,7 +179,9 @@ L3-Multilayer-SW2 should show:
 
 The VPCS workstations will need to be configured with an IP address and a default gateway for ping testing now that the end devices can use the HSRP virtual IP for their VLAN as their default gateway. They will eventually use DHCP in a later section, but for now we need to statically assign addresses for testing.
 
-### Configure VPCS IPs
+The infrastructure server will also use a temporary IP for testing purposes.
+
+### Configure VPCS IPs and Infrastructure Server IP
 
 **PC1-HR (VLAN 10):**
 ```
@@ -199,6 +201,18 @@ ip 192.168.2.10 255.255.255.0 192.168.2.1
 **PC4-IT (VLAN 40):**
 ```
 ip 192.168.3.10 255.255.255.0 192.168.3.1
+```
+
+**Ubuntu-Infra-Server (VLAN 50):**
+
+Default Credentials:
+
+username: ubuntu
+
+password: ubuntu
+```
+sudo ip addr add 172.16.0.10/25 dev enp0s3
+sudo ip route add default via 172.16.0.1
 ```
 
 ### Ping Tests
@@ -235,6 +249,14 @@ A successful ping shows PC4-IT can reach the HSRP VLAN 40 virtual IP active on L
 
 ![](images/pingtesthsrp4.PNG)
 
+**PC1-HR ping Ubuntu-Infra-Server:**
+```
+ping 172.16.0.10
+```
+A successful ping shows inter-VLAN routing is working and the infrastructure server is reachable.
+
+![](images/pingtesthsrp5.PNG)
+
 ## HSRP Failover Test
 
 This confirms that HSRP fails over to the standby switch when the active switch goes down.
@@ -263,10 +285,9 @@ ping 192.168.0.1
 ### Step 3
 
 **Turn off L3-Multilayer-SW1 in GNS3**
-```
-left click L3-Multilayer-SW1
-click Stop
-```
+
+- right click L3-Multilayer-SW1
+- click Stop
 
 ### Step 4
 
@@ -293,10 +314,10 @@ Ping should be successful even with L3-Multilayer-SW1 down.
 ### Step 6
 
 **Restart L3-Multilayer-SW1 in GNS3**
-```
-left click L3-Multilayer-SW1
-click Start
-```
+
+- right click L3-Multilayer-SW1
+- click Start
+
 Wait for the device to fully boot.
 
 ### Step 7
@@ -307,7 +328,7 @@ On L3-Multilayer-SW1, run:
 ```
 show standby brief
 ```
-L3-Multilayer-SW1 should show active for VLANs 10, 20, 30, and 99 again.
+L3-Multilayer-SW1 should show active for VLANs 10, 20, 30, and 99 again. L3-Multilayer-SW1 took back the active role because preemption is configured. 
 
 ![](images/failovertestimg5.PNG)
 
@@ -328,7 +349,7 @@ Pings should be successful
 
 | Problem | Fix |
 |---------|-----|
-| HSRP state showing Init instead of Active or Standby | The virtual IP is not configured or there is a HSRP version mismatch. Verify the IP with 'show standby vlan [id]'. If there is no IP run 'standby [group #] ip [ip address]' on the affected interface. Then confirm both switches are using version 2 by running 'standby version 2' on any interface that is not in version 2. |
-| Active switch not taking back active role after booting up again | Preemption might not be enabled. Run 'interface Vlan[id]' then standby [group #] preempt' on the affected interfaces. |
+| HSRP state showing Init instead of Active or Standby | The virtual IP is not configured or there is an HSRP version mismatch. Verify the IP with 'show standby vlan [id]'. If there is no IP run 'standby [group #] ip [ip address]' on the affected interface. Then confirm both switches are using version 2 by running 'standby version 2' on any interface that is not in version 2. |
+| Active switch not taking back active role after booting up again | Preemption might not be enabled. Run 'interface Vlan[id]' then 'standby [group #] preempt' on the affected interfaces. |
 | Virtual IP not reachable from end devices | Verify HSRP is active on the correct switch by running 'show standby brief'. If it is not active then priority value may be incorrect. Verify virtual IP is correctly configured by running 'show standby brief'. If not correct, on the affected interface, run 'no standby [group #] ip [wrong ip]' followed by 'standby [group #] ip [correct ip]'. Also verify end device default gateway is correctly assigned to the virtual IP in that VLAN by running 'show ip' on the VPCS. |
-| Wrong switch is active | Priority may not be set correctly. Verify by using 'show standby brief'. The active switch should have priority 110 and standby priority 100. If it is wrong, run 'interface Vlan[id]' then 'standby [group #] priority 110' then 'standby [group #] preempt' on the switch that should be active. On the switch that should be standby, run 'interface Vlan[id]' then 'no standby [group #] priority 110'. After that you need to force re-election on the switch that should be active by running 'interface Vlan[id]' then'no standby [group #] preempt' then 'standby [group #] preempt'. |
+| Wrong switch is active | Priority may not be set correctly. Verify by using 'show standby brief'. The active switch should have priority 110 and standby priority 100. If it is wrong, run 'interface Vlan[id]' then 'standby [group #] priority 110' then 'standby [group #] preempt' on the switch that should be active. On the switch that should be standby, run 'interface Vlan[id]' then 'no standby [group #] priority 110'. After that you need to force re-election on the switch that should be active by running 'interface Vlan[id]' then 'no standby [group #] preempt' then 'standby [group #] preempt'. |
