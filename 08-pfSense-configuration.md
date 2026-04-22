@@ -77,6 +77,46 @@ Configure IPv6 address LAN interface via DHCP6?: n
 Enter the new LAN IPv6 address: (press enter for none)
 Do you want to enable the DHCP server on LAN?: n
 ```
+
+<br>
+
 You can now open a browser on your host machine and enter the em1 IPv4 address to open the pfSense webConfigurator.
+
+<br>
+
+## Configure OPT1 (em2) and OPT2 (em3) Interfaces in the webConfigurator
+
+On your host machine, open a browser and enter the em1 IP address you configured.
+```
+http://192.168.245.2
+```
+Log in to pfSense with these default credentials:
+
+- Username: admin
+- Password: pfSense
+
+### Assign OPT1 (em2) and OPT2 (em3) Interfaces
+
+- Go to Interfaces → Assignments
+- em2 and em3 should appear next to available network ports
+- Click Add next to em2 and it should become OPT1
+- Click Add next to em3 and it should become OPT2
+- Click Save
+
+### Configure OPT1 (em2)
+
+This is the link connecting to L3-Multilayer-SW2. Configure it with the point-to-point IP chosen in section 02.
+
+- Go to Interfaces → OPT1
+- Check Enable Interface
+- Set the description to L3-Multilayer-SW2 P2P Link
+- Set IPv4 Configuration Type to Static IPv4
+- Set IPv4 Address to 10.0.0.5 with subnet /30
+- Leave IPv4 Upstream Gateway blank
+- Click Save then Apply Changes
+
+  
+
+
 
 
