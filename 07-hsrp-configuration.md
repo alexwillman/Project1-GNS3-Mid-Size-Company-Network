@@ -326,3 +326,9 @@ Pings should be successful
 
 ## Common Problems
 
+| Problem | Fix |
+|---------|-----|
+| HSRP state showing Init instead of Active or Standby | The virtual IP is not configured or there is a HSRP version mismatch. Verify the IP with 'show standby vlan [id]'. If there is no IP run 'standby [group #] ip [ip address]' on the affected interface. Then confirm both switches are using version 2 by running 'standby version 2' on any interface that is not in version 2. |
+| Active switch not taking back active role after booting up again | Preemption might not be enabled. Run 'interface Vlan[id]' then standby [group #] preempt' on the affected interfaces. |
+| Virtual IP not reachable from end devices | Verify HSRP is active on the correct switch by running 'show standby brief'. If it is not active then priority value may be incorrect. Verify virtual IP is correctly configured by running 'show standby brief'. If not correct, on the affected interface, run 'no standby [group #] ip [wrong ip]' followed by 'standby [group #] ip [correct ip]'. Also verify end device default gateway is correctly assigned to the virtual IP in that VLAN by running 'show ip' on the VPCS. |
+| Wrong switch is active | Priority may not be set correctly. Verify by using 'show standby brief'. The active switch should have priority 110 and standby priority 100. If it is wrong, run 'interface Vlan[id]' then 'standby [group #] priority 110' then 'standby [group #] preempt' on the switch that should be active. On the switch that should be standby, run 'interface Vlan[id]' then 'no standby [group #] priority 110'. After that you need to force re-election on the switch that should be active by running 'interface Vlan[id]' then'no standby [group #] preempt' then 'standby [group #] preempt'. |
