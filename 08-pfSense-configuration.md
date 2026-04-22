@@ -105,17 +105,83 @@ Log in to pfSense with these default credentials:
 
 ### Configure OPT1 (em2)
 
-This is the link connecting to L3-Multilayer-SW2. Configure it with the point-to-point IP chosen in section 02.
+This is the link connecting to L3-Multilayer-SW2. Configure it with the point-to-point IP address for em2 chosen in section 02.
 
 - Go to Interfaces → OPT1
 - Check Enable Interface
-- Set the description to L3-Multilayer-SW2 P2P Link
+- Set the description to L3-Multilayer-SW2-Link
 - Set IPv4 Configuration Type to Static IPv4
 - Set IPv4 Address to 10.0.0.5 with subnet /30
 - Leave IPv4 Upstream Gateway blank
 - Click Save then Apply Changes
 
-  
+### Configure OPT2 (em3)
+
+This is the link connecting to L3-Multilayer-SW1. Configure it with the point-to-point IP address for em3 chosen in section 02.
+
+- Go to Interfaces → OPT2
+- Check Enable Interface
+- Set Description to L3-Multilayer-SW1-Link
+- Set IPv4 Configuration Type to Static IPv4
+- Set IPv4 Address to 10.0.0.1 with subnet /30
+- Leave IPv4 Upstream Gateway blank
+- Click Save then Apply Changes
+
+### Verify Interfaces
+
+- Go to Status → Dashboard
+- All 4 interfaces should show up and have the correct IP address.
+ 
+![](images/verifyinterfacesimg.PNG)
+
+<br>
+
+## Installing and Configuring the FRR Package
+
+The FRR (Free Range Routing) package is the package needed to run routing protocols including OSPF. We must install and configure FRR before configuring OSPF.
+
+### Install FRR
+
+- Go to System → Package Manager → Available Packages
+- Search for frr
+- Click Install next to the FRR package
+- Click confirm
+
+Once it is installed, FRR options will appear under the Services tab.
+
+![](images/installFRRimg.PNG)
+
+### Configure FRR
+
+The FRR global settings must be configured before OSPF. The Default Router ID will be 3.3.3.3, keeping the same pattern as our core switches. The master password will be the same as used in the rest of the lab for simplicity. Syslog logging will be important for when Syslog is configured later.
+
+- Go to Services → FRR Global/Zebra
+- Click Enable FRR
+- Set the Default Router ID to 3.3.3.3
+- Set a Master Password
+- Check Syslog Logging
+- Leave all others as default
+- Click Save
+
+![](images/configureFRRimg.PNG)
+
+<br>
+
+## Configuring OSPF
+
+pfSense will form an OSPF adjacency with both core switches through the OPT1 and OPT2 point-to-point interfaces. It will also advertise a default route into the network so devices can access the internet.
+
+### Enable OSPF
+
+- Go to Services → FRR OSPF
+- Check Enable OSPF Routing
+- Check Log Adjacency Changes
+- Set the Router ID to 3.3.3.3
+- Under Default Route Distribution check Redistribute Default
+- Leave all other settings as default
+- Click Save
+
+**Note:** Do not configure the OSPF networks here, we will configure them through the interfaces.
 
 
 
