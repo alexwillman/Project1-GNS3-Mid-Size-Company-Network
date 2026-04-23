@@ -270,7 +270,7 @@ There are no current firewall rules configured, so that means all traffic on the
 - Repeat same steps as L3MultilayerSW2Link (OPT1)
 - Click Save then Apply Changes
 
-Adding these rules will allow the OSPF adjacency to form accross both links.
+Adding these rules will allow the OSPF adjacency to form accross both links which we will confirm in the Verification part of this section.
 
 <br>
 
