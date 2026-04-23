@@ -293,6 +293,60 @@ pfSense will handle NAT for devices reaching the internet through its WAN interf
 
 ## Verification
 
+After OSPF was configured on pfSense we can verify the switches can see it as an OSPF neighbor. We can also verify the default route was configured.
+
+### Verify OSPF Adjacency
+
+On both L3-Multilayer-SW1 and L3-Multilayer-SW2, run:
+```
+show ip ospf neighbor
+```
+
+pfSense should now appear with a router ID of 3.3.3.3 and should show a state FULL.
+
+If it does not appear as a neighbor, confirm:
+
+- FRR is enabled in FRR Global/Zebra settings
+- OSPF is enabled and Redistribute Default is checked in FRR OSPF settings
+- L3MultilayerSW2Link (OPT1) and L3MultilayerSW1Link (OPT2) are correctly configured in FRR OSPF Interfaces settings
+- The temporary allow all firewall rules are added on both L3MultilayerSW2Link and L3MultilayerSW1Link interfaces in Firewall Rules settings
+
+**L3-Multilayer-SW1 OSPF Neighbors:**
+
+![](images/verifyospfadjacencyimg1.PNG)
+
+**L3-Multilayer-SW2 OSPF Neighbors:**
+
+![](images/verifyospfadjacencyimg2.PNG)
+
+### Verify Default Route
+
+On both L3-Multilayer-SW1 and L3-Multilayer-SW2, run:
+```
+show ip route ospf
+```
+
+A default route should now appear because it was learned by OSPF.
+
+**L3-Multilayer-SW1 Default Route:**
+
+![](images/verifydefaultrouteimg1.PNG)
+
+This shows the next hop is 10.0.0.1 (em3)
+
+**L3-Multilayer-SW2 Default Route:**
+
+![](images/verifydefaultrouteimg2.PNG)
+
+This shows the next hop is 10.0.0.5 (em2)
+
+<br>
+
+## Ping Test Verification
+
+
+
+
 
 
 
