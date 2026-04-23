@@ -36,7 +36,7 @@ The new topology should look like this:
 
 ![](images/addcloudnodetopology.PNG)
 
-### Step 3: Assign pfSense Interfaces in the Console Menu
+### Step 3: Assign pfSense Interfaces in the pfSense Console Menu
 
 After loading up pfSense, select option 1: Assign Interfaces
 ```
@@ -49,7 +49,7 @@ Enter optional interface 3: (skip by pressing enter)
 Do you want to proceed?: y
 ```
 
-### Step 4: Set WAN and LAN IP addresses in the Console Menu
+### Step 4: Set WAN and LAN IP addresses in the pfSense Console Menu
 
 **WAN interface (em0) connecting to NAT node:**
 
