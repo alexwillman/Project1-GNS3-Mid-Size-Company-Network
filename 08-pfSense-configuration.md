@@ -344,7 +344,7 @@ This shows the next hop is 10.0.0.5 (em2)
 
 ## Ping Testing Verification
 
-### L3-Multilayer-SW1
+### L3-Multilayer-SW1 ping pfSense em3 interface
 ```
 ping 10.0.0.1
 ```
@@ -352,7 +352,7 @@ A successful ping confirms connectivity to pfSense L3MultilayerSW1Link (em3/OPT2
 
 ![](images/pfsensepingtest1.PNG)
 
-### L3-Multilayer-SW2
+### L3-Multilayer-SW2 ping pfSense em2 interface
 ```
 ping 10.0.0.5
 ```
@@ -360,7 +360,7 @@ A successful ping confirms connectivity to pfSense L3MultilayerSW2Link (em2/OPT1
 
 ![](images/pfsensepingtest2.PNG)
 
-### Any VPCS workstation
+### Any VPCS workstation ping internet IP
 ```
 ping 8.8.8.8
 ```
@@ -368,7 +368,7 @@ A successful ping confirms internet connectivity on department workstations.
 
 ![](images/pfsensepingtest3.PNG)
 
-### PC1-HR (VLAN 10)
+### PC1-HR (VLAN 10) ping PC4-IT (VLAN 40)
 ```
 ping 192.168.3.10
 ```
