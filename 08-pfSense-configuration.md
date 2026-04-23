@@ -32,6 +32,8 @@ In GNS3:
 - Select eth1 from the available interfaces and click Add then OK
 - Connect a cable from the **eth1** interface of the Cloud Node to the **em1** interface of the pfSense-Firewall
 
+**Note:** Yours may be eth0 and not eth1. If eth1 does not work repeat the steps with eth0.
+
 The new topology should look like this:
 
 ![](images/addcloudnodetopology.PNG)
@@ -60,7 +62,7 @@ Configure IPv4 address WAN interface via DHCP?: y
 Configure IPv6 address WAN interface via DHCP6?: n
 Enter the new WAN IPv6 address: (press enter for none)
 ```
-The WAN interface will now have an IP address recieved from DHCP via the NAT node
+The WAN interface will now have an IP address received from DHCP via the NAT node
 
 **LAN interface (em1) connecting to Cloud node:**
 
@@ -95,7 +97,7 @@ http://192.168.245.2
 Log in to pfSense with these default credentials:
 
 - Username: admin
-- Password: pfSense
+- Password: pfsense
 
 **Note:** In a production environment the username and password should be changed to something secure but for lab purposes you can leave it at default if you would like.
 
@@ -181,7 +183,7 @@ pfSense will form an OSPF adjacency with both core switches through the OPT1 and
 - Check Enable OSPF Routing
 - Check Log Adjacency Changes
 - Set the Router ID to 3.3.3.3
-- Under Default Route Distribution check Redistribute Default
+- Under Default Route Redistribution check Redistribute Default
 - Leave all other settings as default
 - Click Save
 
@@ -270,7 +272,7 @@ There are no current firewall rules configured, so that means all traffic on the
 - Repeat same steps as L3MultilayerSW2Link (OPT1)
 - Click Save then Apply Changes
 
-Adding these rules will allow the OSPF adjacency to form accross both links which we will confirm in the Verification part of this section.
+Adding these rules will allow the OSPF adjacency to form across both links which we will confirm in the Verification part of this section.
 
 <br>
 
@@ -328,19 +330,19 @@ On both L3-Multilayer-SW1 and L3-Multilayer-SW2, run:
 show ip route ospf
 ```
 
-A default route should now appear because it was learned by OSPF.
+A default route should now appear because it was learned by OSPF. You should also see a route for 192.168.245.0/24. This is the pfSense LAN interface to the Cloud node and is expected.
 
 **L3-Multilayer-SW1 Default Route:**
 
 ![](images/verifydefaultrouteimg1.PNG)
 
-This shows the next hop is 10.0.0.1 (em3)
+This shows the next hop is 10.0.0.1 (em3).
 
 **L3-Multilayer-SW2 Default Route:**
 
 ![](images/verifydefaultrouteimg2.PNG)
 
-This shows the next hop is 10.0.0.5 (em2)
+This shows the next hop is 10.0.0.5 (em2).
 
 <br>
 
