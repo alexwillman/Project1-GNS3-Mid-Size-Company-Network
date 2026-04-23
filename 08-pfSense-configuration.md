@@ -80,7 +80,9 @@ Do you want to enable the DHCP server on LAN?: n
 
 <br>
 
-You can now open a browser on your host machine and enter the em1 IPv4 address to open the pfSense webConfigurator.
+You can now open a browser on your host machine and enter the em1 IPv4 address to open the pfSense webConfigurator. It is displayed in the main console menu on pfSense.
+
+![](images/em1ippfsense.PNG)
 
 <br>
 
