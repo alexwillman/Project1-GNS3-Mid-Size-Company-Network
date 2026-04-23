@@ -1,7 +1,7 @@
 # pfSense Configuration
 
 In this network, pfSense will act as the edge firewall and default gateway for internet traffic. It connects to both layer 3 core switches via point-to-point links and will run OSPF to advertise a default route into the network so devices can reach the internet.
-This section will include an addition to the topology and cover the set up of a cloud node for browser access to pfSense, configuring pfSense interfaces, installing the FRR package for OSPF, configuring OSPF on pfSense, verifying NAT, verifying OSPF adjacency, and verifying internet access from end devices.
+This section will include an addition to the topology. It will cover the set up of a cloud node for browser access to pfSense, configuring pfSense interfaces, installing the FRR package for OSPF, configuring OSPF on pfSense, configuring NAT settings, verifying OSPF adjacency, and verifying internet access from end devices.
 
 pfSense firewall rules will be configured in a later section after all internal services are configured. This ensures these services can be configured and verified without firewall rules potentially blocking the traffic from these services.
 
@@ -270,8 +270,24 @@ There are no current firewall rules configured, so that means all traffic on the
 
 Adding these rules will allow the OSPF adjacency to form accross both links.
 
+<br>
 
-  
+## Configure NAT Settings
+
+pfSense will handle NAT for devices reaching the internet through its WAN interface. We must configure NAT settings to allow all end devices internet access.
+
+- Go to Firewall → NAT → Outbound
+- Change the Outbound NAT Mode to Hybrid Outbound NAT rule generation
+- Click Save and Apply Changes
+- Under the Mappings section, click Add
+- Set the Interface to WAN
+- Set the Source to Network or Alias
+- In the box next to Network or Alias type 192.168.0.0 with a /16 mask
+- Set Destination to Any
+- In Description type Internal VLAN NAT
+- Click Save then Apply Changes
+
+![](images/configureNATimg.PNG)
 
 
 
