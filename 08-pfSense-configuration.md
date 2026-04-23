@@ -289,6 +289,10 @@ pfSense will handle NAT for devices reaching the internet through its WAN interf
 
 ![](images/configureNATimg.PNG)
 
+<br>
+
+## Verification
+
 
 
 
