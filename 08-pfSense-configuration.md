@@ -95,6 +95,8 @@ Log in to pfSense with these default credentials:
 - Username: admin
 - Password: pfSense
 
+**Note:** In a production environment the username and password should be changed to something secure but for lab purposes you can leave it at default if you would like.
+
 ### Assign OPT1 (em2) and OPT2 (em3) Interfaces
 
 - Go to Interfaces → Assignments
@@ -182,6 +184,94 @@ pfSense will form an OSPF adjacency with both core switches through the OPT1 and
 - Click Save
 
 **Note:** Do not configure the OSPF networks here, we will configure them through the interfaces.
+
+### Configure OSPF Interfaces
+
+OSPF should be enabled on OPT1 (em2) and OPT2 (em3) only. em1 will be set to passive since no OSPF neighbors exist on that interface.
+
+**OPT1 (em2):**
+
+This is the interface that connects to L3-Multilayer-SW2.
+
+- Go to Services → FRR OSPF → Interfaces
+- Click Add
+- In the Interface dropdown, select L3MultilayerSW2Link (or OPT1)
+- In the Description, write Link to L3-Multilayer-SW2
+- Set Network Type to Point-to-Point
+- Check Ignore MTU
+- Set Area to 0.0.0.0
+- Leave other values as default
+- Click Save
+
+**OPT2 (em3):**
+
+This is the interface that connects to L3-Multilayer-SW1
+
+- Click Add
+- In the Interface dropdown, select L3MultilayerSW1Link (or OPT2)
+- In the Description, write Link to L3-Multilayer-SW1
+- Set Network Type to Point-to-Point
+- Check Ignore MTU
+- Set Area to 0.0.0.0
+- Leave other values as default
+- Click Save
+
+**LAN (em1):**
+
+This is the link to the Cloud node
+
+- Click Add
+- In the Interface dropdown, select LAN
+- In the Description, write Link to Cloud node
+- Check Interface is Passive
+- Set Area to 0.0.0.0
+- Leave other values as default
+- Click Save
+
+**Completed Interfaces Example:**
+
+![](images/interfacesimg.PNG)
+
+**Area Configuration:**
+
+We also need to configure the area in the Area tab.
+
+- Go to Services →  FRR OSPF →  Areas
+- Click Add
+- Set Area to 0.0.0.0
+- Set Area Type to Normal
+- Leave other values as default
+- Click Save
+
+![](images/areasimg.PNG)
+
+### Temporary Firewall Rules for OSPF Adjacency
+
+There are no current firewall rules configured, so that means all traffic on these interfaces will be blocked by default. We will need to temporarily add allow all rules on both OPT1 and OPT2 for the OSPF traffic to reach pfSense.
+
+**Add Allow Rule on L3MultilayerSW2Link (OPT1):**
+
+- Go to Firewall → Rules → L3MultilayerSW2Link
+- Click Add
+- Set Action to Pass
+- Set Interface to L3MultilayerSW2Link
+- Set Protocol to Any
+- Set Source to Any
+- Set Destination to Any
+- Leave other values as default
+- Click Save then Apply Changes
+
+**Add Allow Rule on L3MultilayerSW1Link (OPT2):**
+
+- Go to Firewall → Rules → L3MultilayerSW1Link
+- Click Add
+- Repeat same steps as L3MultilayerSW2Link (OPT1)
+- Click Save then Apply Changes
+
+Adding these rules will allow the OSPF adjacency to form accross both links.
+
+
+  
 
 
 
