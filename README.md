@@ -57,7 +57,7 @@ These images are required to run the lab. You must obtain them yourself from the
 | Image | Source |
 |-------|--------|
 | Cisco IOSvL2 | [GNS3 Appliance / IOSvL2](https://gns3.com/marketplace/appliances/cisco-iosvl2) — requires a paid CML subscription |
-| pfSense CE 2.7.2 | [GNS3 Appliance / pfSense CE 2.7.2](https://gns3.com/marketplace/appliances/pfsense) |
+| pfSense CE 2.7.2 | [GNS3 Appliance](https://gns3.com/marketplace/appliances/pfsense) [pfSense CE 2.7.2](https://atxfiles.netgate.com/mirror/downloads/) |
 | Ubuntu Server (Noble Numbat) | [GNS3 Appliance / Ubuntu Server](https://gns3.com/marketplace/appliances/ubuntu-cloud-guest) |
 
 **Importing the appliances:** To import the appliance, follow the tutorial [here](https://docs.gns3.com/docs/using-gns3/beginners/import-gns3-appliance/) for each appliance.
