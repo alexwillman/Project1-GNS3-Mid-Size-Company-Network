@@ -291,6 +291,13 @@ pfSense will handle NAT for devices reaching the internet through its WAN interf
 - Set Destination to Any
 - In Description type Internal VLAN NAT
 - Click Save then Apply Changes
+- Under the Mappings section, click Add
+- Set the Interface to WAN
+- Set the Source to Network or Alias
+- In the box next to Network or Alias type 172.16.0.0 with a /25 mask
+- Set Destination to Any
+- In Description type Server NAT
+- Click Save then Apply Changes
 
 ![](images/configureNATimg.PNG)
 
