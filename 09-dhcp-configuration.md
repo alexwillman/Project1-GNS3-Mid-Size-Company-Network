@@ -8,7 +8,7 @@ This section will cover configuring a static IP on Ubuntu-Infra-Server, installi
 
 ## Configuring a Static IP on Ubuntu-Infra-Server
 
-Before configuring DHCP, we will need to set a static IP address on the Ubuntu-Infra-Server. The IP address we configured before is only temporary and will be removed once the device reboots. We will now configure the IP address to stay even after a reboot.
+Before configuring DHCP, we will need to set a static IP address on the Ubuntu-Infra-Server. The IP address we configured in section 07 is only temporary and will be removed once the device reboots. We will now configure the IP address to stay even after a reboot.
 
 ### Log in to Ubuntu-Infra-Server using default credentials
 
@@ -28,7 +28,7 @@ In this file, add the line:
 ```
 network: {config: disabled}
 ```
-Then save the file with Crtl+X, then Y, then press enter.
+Then save the file with Ctrl+X, then Y, then press enter.
 
 ![](images/disablecloudinitimg.PNG)
 
