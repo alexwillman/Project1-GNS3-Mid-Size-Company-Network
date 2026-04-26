@@ -76,7 +76,7 @@ Then save the file with Ctrl+X, then Y, then enter.
 
 ![](images/netplanconfigimg.PNG)
 
-Apply the new configuration using:
+Apply the new configuration using the command:
 ```
 sudo netplan apply
 ```
