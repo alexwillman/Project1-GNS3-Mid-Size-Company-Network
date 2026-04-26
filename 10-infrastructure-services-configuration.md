@@ -26,7 +26,7 @@ This section will cover the static IP address configuration of the Ubuntu-Admin-
 
 The Ubuntu-Admin-PC will need to be configured with a permanent static IP address to verify the services configured in this section and chrony NTP installed.
 
-### Configure a static IP address
+### Configure a hostname
 
 Log into Ubuntu-Admin-PC using the default credentials:
 
@@ -39,3 +39,7 @@ Change the hostname using the command:
 sudo hostnamectl set-hostname admin-pc
 ```
 **Note:** The hostname will change after a reboot.
+
+### Disable cloud-init network management
+
+Like before, we need to disable cloud-in
