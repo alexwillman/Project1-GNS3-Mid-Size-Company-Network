@@ -359,3 +359,13 @@ ping 192.168.1.11
 ![](images/pingtestingimg4.PNG)
 
 A successful ping will confirm DHCP is working correctly on this device.
+
+## Common Problems
+
+| Problem | Fix |
+|---------|-----|
+| isc-dhcp-server fails to start | Run 'sudo dhcpd -t -cf /etc/dhcp/dhcpd.conf' to check for syntax errors in the configuration file. Then fix any errors and restart with 'sudo systemctl restart isc-dhcp-server'. |
+| VPCS not receiving IP address | Verify the helper address is configured on the correct SVI with 'show running-config' on each core switch. Scroll down to the vlan interface section and make sure the helper address is correct. Also verify isc-dhcp-server is running with 'sudo systemctl status isc-dhcp-server'. |
+| Wrong gateway assigned | Verify the 'option routers' value in the /etc/dhcp/dhcpd.conf file matches the HSRP virtual IP for that VLAN. |
+| DHCP relay not working after failover | Verify 'ip helper-address 172.16.0.5' is configured on both L3 core switches for every VLAN SVI by running 'show running-config on each L3 core switch and scrolling down to the vlan interface section. If you are missing one then run 'interface Vlan[id]' then 'ip helper-address 172.16.0.5' on the affected switch. |
+| Service shows active but VPCS is not getting an IP | Verify 'INTERFACESv4="ens3"' is set correctly in the /etc/default/isc-dhcp-server file and then restart the service using 'sudo systemctl restart isc-dhcp-server'. |
