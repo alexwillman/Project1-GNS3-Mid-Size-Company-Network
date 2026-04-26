@@ -12,8 +12,8 @@ We are saving 10 addresses for network infrastructure devices now and potential 
 
 | VLAN | Subnet | Pool Range | Gateway |
 |------|--------|------------|---------|
-| 10 - HR | 192.168.0.0/24 | 192.168.0.11 - 192.168.0.254 | 192.168.0.1
-| 20 - Sales | 192.168.1.0/24 | 192.168.1.11 - 192.168.1.254 | 192.168.1.1
+| 10 - HR | 192.168.0.0/24 | 192.168.0.11 - 192.168.0.254 | 192.168.0.1 |
+| 20 - Sales | 192.168.1.0/24 | 192.168.1.11 - 192.168.1.254 | 192.168.1.1 |
 | 30 - Finance | 192.168.2.0/24 | 192.168.2.11 - 192.168.2.254 | 192.168.2.1 |
 | 40 - IT | 192.168.3.0/24 | 192.168.3.11 - 192.168.3.254 | 192.168.3.1 |
 
@@ -192,7 +192,7 @@ sudo systemctl start isc-dhcp-server
 sudo systemctl enable isc-dhcp-server
 ```
 
-The verify the service is running by using:
+Then verify the service is running by using:
 ```
 systemctl status isc-dhcp-server
 ```
@@ -254,7 +254,7 @@ exit
 interface Vlan40
 ip helper-address 172.16.0.5
 exit
-do wr
+do write
 ```
 
 ![](images/helperaddressimg2.PNG)
@@ -269,7 +269,7 @@ To request an IP address via DHCP on PC1-HR, PC2-Sales, PC3-Finance, and PC4-IT,
 ```
 ip dhcp
 ```
-**Note:** In my test, PC1-HR could not locate the DHCP server on the first attempt. It sent out the discover and offer, but dropped after that and did not complete the rest of the sequence. Running 'ip dhcp' again worked and it successfully recieved an IP address via DHCP.
+**Note:** In my test, PC1-HR could not locate the DHCP server on the first attempt. It sent out the discover and offer, but dropped after that and did not complete the rest of the sequence. Running 'ip dhcp' again worked and it successfully received an IP address via DHCP.
 
 To confirm the workstations received the correct addresses, run:
 ```
