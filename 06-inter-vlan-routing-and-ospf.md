@@ -195,7 +195,8 @@ The SVI interface should show the correct IP address and a status and protocol o
 
 ## Configuring Management SVIs on Layer 2 Switches
 
-The layer 2 switches will need a VLAN 99 SVI for SSH access to manage the devices. The default gateway will point to the HSRP virtual IP for VLAN 99 to allow management traffic to be routed.
+The layer 2 switches will need a VLAN 99 SVI for SSH access to manage the devices. The default gateway will point to the HSRP virtual IP for VLAN 99 to allow management traffic to be routed. IP routing may be enabled already so we remove it so that the switch does not ignore the default gateway set.
+
 
 ### L2-SW1
 ```
@@ -207,6 +208,7 @@ description Management VLAN 99
 ip address 192.168.99.4 255.255.255.0
 no shutdown
 exit
+no ip routing
 ip default-gateway 192.168.99.1
 do write
 ```
@@ -222,6 +224,7 @@ description Management VLAN 99
 ip address 192.168.99.5 255.255.255.0
 no shutdown
 exit
+no ip routing
 ip default-gateway 192.168.99.1
 do write
 ```
@@ -237,6 +240,7 @@ description Management VLAN 99
 ip address 192.168.99.6 255.255.255.0
 no shutdown
 exit
+no ip routing
 ip default-gateway 192.168.99.1
 do write
 ```
@@ -451,3 +455,4 @@ A successful ping on each will confirm all VLAN SVIs are reachable on L3-Multila
 | Routed interface showing as switchport | The 'no switchport' command was not applied. Rerun the command on the affected interface. |
 | Ping from L3 switch to L2 switch management SVI failing | Verify the VLAN 99 SVI is up on the L2 switch with 'show ip interface brief'. If it is down run 'no shutdown' on the Vlan99 interface. Verify the IP address is correct and update it if not by running 'interface Vlan99' and then 'ip address [correct ip] [subnet mask]'. |
 | Ping succeeds from L3-Multilayer-SW1 to L3-Multilayer-SW2 but not the reverse | Verify the SVI IP address is correct on L3-Multilayer-SW2 with 'show ip interface brief'. If an IP address is wrong use 'interface Vlan[id]' to go into the affected interface and rerun 'ip address [correct ip] [subnet mask]'. |
+| L2 switch cannot be reached from other subnets | IP routing may be enabled on the L2 switch causing it to ignore the default gateway. Run 'no ip routing' in global config and verify 'ip default-gateway 192.168.99.1' is configured. |
