@@ -643,7 +643,7 @@ do write
 
 ### Verify NTP on each switch
 
-Verify NTP is syncing and the reference clock shows the IP of Ubuntu-Infra-Server (172.16.0.5).
+Verify NTP is syncing and the reference shows the IP of Ubuntu-Infra-Server (172.16.0.5).
 
 Use the commands:
 ```
