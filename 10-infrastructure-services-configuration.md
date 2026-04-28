@@ -321,6 +321,7 @@ Then directly under that line, we allow internal subnets to use this server usin
 ```
 allow 192.168.0.0/16
 allow 172.16.0.0/16
+allow 10.0.0.0/24
 ```
 
 Then change the makestep 1 3 line to:
@@ -585,6 +586,7 @@ chronyc tracking
 
 All five switches need to be configured to sync time from Ubuntu-Infra-Server. We are setting the minpoll and maxpoll options to poll more frequently to help reduce the clock offset in the lab environment.
 
+**Note:** Virtual Cisco IOSvL2 switches in GNS3 can experience clock drift issues. If the switch shows as unsynchronized after configuring NTP try restarting the chrony service on Ubuntu-Infra-Server using 'sudo systemctl restart chrony'. Then wait a few minutes for it to sync to the switches. If that does not work then try saving configuration on switches using 'do write' and safely shut down ubuntu servers using 'sudo shutdown now'. Wait a few minutes before turning them back on. Then wait a few minutes for everything to load correctly before verifying NTP with 'show ntp status'. RAM and CPU pressure on the host machine can also cause inconsistencies with the synchronization of NTP. On real devices NTP will work more consistently than in a virtual environment. A full restart of the host machine helped resolve NTP synchronization issues during troubleshooting of this issue.
 
 ### L3-Multilayer-SW1
 ```
@@ -633,7 +635,149 @@ ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
 do write
 ```
 
+### Verify NTP on each switch
 
+Verify NTP is syncing and the reference clock shows the IP of Ubuntu-Infra-Server (172.16.0.5).
+
+Use the commands:
+```
+show ntp status
+show ntp associations
+```
+**L3-Multilayer-SW1:**
+
+![](images/verifyntpimg1.PNG)
+
+**L2-SW1:**
+
+![](images/verifyntpimg2.PNG)
+
+<br>
+
+## Configuring NTP on pfSense
+
+We will configure pfSense to use Ubuntu-Infra-Server as the NTP source.
+
+<br>
+
+Access the pfSense webConfigurator on your browser with the default credentials.
+
+Username: admin
+
+Password: pfsense
+
+### Configure NTP
+
+- Go to Services → NTP
+- Leave Enable NTP Server checked
+- Under Time Servers, clear the existing 2.pfsense.pool.ntp.org entry
+- Enter 172.16.0.5 in the Time Servers field
+- Set Type to Server
+- Check Prefer
+- Leave all other settings as default
+- Click Save
+
+![](images/pfsensentpconfigimg.PNG)
+
+### Verify NTP on pfSense
+
+Wait a few minutes after configuring for everything to sync, then:
+
+- Go to Status → NTP
+
+The status should show Active Peer and the Server should show 172.16.0.5.
+
+![](images/verifypfsensentpimg.PNG)
+
+<br>
+
+## Installing and Configuring apache2 web server on Ubuntu-Infra-Server
+
+We will install apache2 and configure a simple webpage to test connectivity to the http server.
+
+<br>
+
+### Install apache2
+
+On Ubuntu-Infra-Server, install apache2 using the command:
+```
+sudo apt update
+sudo apt install apache2 -y
+```
+**Note:** If no disk space is left run the command 'sudo apt clean' to free up some space.
+
+### Local test
+
+Since we do not have access to a browser on any device in GNS3, we will be using 'curl' to test if we can access the web page.
+
+<br>
+
+Check if apache2 is running using the commands
+```
+sudo systemctl status apache2 --no-pager -l
+sudo systemctl is-enabled apache2
+```
+
+![](images/localtestapache2img1.PNG)
+
+On Ubuntu-Infra-Server, run the command:
+```
+curl http://172.16.0.5
+```
+
+The command should return the HTML content of the apache2 default page, and confirm apache2 is serving the page correctly.
+
+![](images/localtestapache2img2.PNG)
+
+### Create a simple webpage to replace the default page
+
+Replacing the default page will make it easy to know if we are reaching the correct server.
+
+Create the webpage using the command:
+```
+sudo nano /var/www/html/index.html
+```
+
+Then replace the contents of that file with:
+```
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ECorp Web Page</title>
+</head>
+<body>
+    <h1>Project GNS3 Mid-Size Company Network</h1>
+    <p>This page is served from Ubuntu-Infra-Server at 172.16.0.5</p>
+</body>
+</html>
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/apache2newwebpageimg.PNG)
+
+### Start and enable apache2
+
+Start apache2 and enable it to run on startup using the commands:
+```
+sudo systemctl start apache2
+sudo systemctl enable apache2
+```
+
+Verify it is running using:
+```
+sudo systemctl status apache2 --no-pager -l
+```
+
+Then we can verify the web page was changed to the new simple page using the command:
+```
+curl http://172.16.0.5
+```
+
+![](images/verifyapache2newpageimg.PNG)
+
+<br>
+
+## Verification
 
 
 
