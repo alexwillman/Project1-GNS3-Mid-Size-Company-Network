@@ -586,7 +586,7 @@ chronyc tracking
 
 All five switches need to be configured to sync time from Ubuntu-Infra-Server. We are setting the minpoll and maxpoll options to poll more frequently to help reduce the clock offset in the lab environment.
 
-**Note:** Virtual Cisco IOSvL2 switches in GNS3 can experience clock drift issues. If the switch shows as unsynchronized after configuring NTP try restarting the chrony service on Ubuntu-Infra-Server using 'sudo systemctl restart chrony'. Then wait a few minutes for it to sync to the switches. If that does not work then try saving configuration on switches using 'do write' and safely shut down ubuntu servers using 'sudo shutdown now'. Wait a few minutes before turning them back on. Then wait a few minutes for everything to load correctly before verifying NTP with 'show ntp status'. RAM and CPU pressure on the host machine can also cause inconsistencies with the synchronization of NTP. On real devices NTP will work more consistently than in a virtual environment. A full restart of the host machine helped resolve NTP synchronization issues during troubleshooting of this issue.
+**Note:** Virtual Cisco IOSvL2 switches in GNS3 can experience clock drift issues. If the switch shows as unsynchronized after configuring NTP try restarting the chrony service on Ubuntu-Infra-Server using 'sudo systemctl restart chrony'. Then wait a few minutes for it to sync to the switches. If that does not work then try saving configuration on switches using 'do write' and safely shut down ubuntu servers using 'sudo shutdown now'. Wait a few minutes before turning them back on. Then wait a few minutes for everything to load correctly before verifying NTP with 'show ntp status'. **RAM and CPU pressure on the host machine can also cause inconsistencies with the synchronization of NTP.** On real devices NTP will work more consistently than in a virtual environment. A full restart of the host machine helped resolve NTP synchronization issues during troubleshooting of this issue.
 
 ### L3-Multilayer-SW1
 ```
@@ -779,5 +779,47 @@ curl http://172.16.0.5
 
 ## Verification
 
+After DNS, NTP, and HTTP are configured, we can verify that they work using simple verification commands. We can also verify that the department workstations can access Ubuntu-Infra-Server using a ping test. Save and restart all devices if CPU usage is high to reset CPU usage and allow traffic to flow smoother.
 
+### Verify DNS from Ubuntu-Admin-PC
+
+On Ubuntu-Admin-PC we can verify forward DNS lookup is working by running the commands:
+```
+nslookup ubuntu-infra-server.ecorp.local
+nslookup l3-multilayer-sw1.ecorp.local
+nslookup google.com
+```
+The hostnames should resolve to the correct IP address.
+
+Then we can verify reverse DNS lookup is working by running the commands:
+```
+nslookup 172.16.0.5
+nslookup 192.168.99.2
+```
+The IP addresses should resolve back to the correct hostname.
+
+![](images/verifydnsimg.PNG)
+
+### Verify HTTP from Ubuntu-Admin-PC
+
+Verify Ubuntu-Admin-PC can reach the HTTP server by running the command:
+```
+curl http://www.ecorp.local
+```
+The output should show the HTML of our new simple web page. This confirms that the HTTP server is reachable, that DNS resolution is working, and the CNAME record we set earlier is resolving.
+
+![](images/verifyhttpserver.PNG)
+
+### Verify Connectivity from department workstations
+
+From any VPCS workstation run the commands:
+```
+ip dhcp
+ping 172.16.0.5
+```
+A successful ping confirms department workstations can reach the Infrastructure Server and therefore access the services on it.
+
+**Note:** Since VPCS have limited functionality we cannot directly confirm the functionality of the services from them.
+
+![](images/verifyconnectivitypc1.PNG)
 
