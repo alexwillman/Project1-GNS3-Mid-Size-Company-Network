@@ -829,3 +829,14 @@ A successful ping confirms department workstations can reach the Infrastructure 
 
 ![](images/verifyconnectivitypc1.PNG)
 
+## Common Problems
+
+| Problem | Fix |
+|---------|-----|
+| NTP not syncing, intermittent ping drops, or DNS timeouts | Check your RAM/CPU usage. These problems can be cause by a high RAM/CPU load. First, try shutting down all devices. Use `sudo shutdown now` on all Ubuntu servers and `do write` on all switches and then stop all devices. Wait 30 seconds, then turn them back on. Wait a few minutes after turning them back on to allow everything to load and CPU to drop. Then verify again. |
+| No space left on server | Run `sudo apt clean` |
+| bind9 fails to start | Run these commands to check for syntax errors in the configuration files. Fix any errors and restart with 'sudo systemctl restart named'. `sudo named-checkconf /etc/bind/named.conf` , `sudo named-checkzone ecorp.local /etc/bind/db.ecorp.local` , `sudo named-checkzone 168.192.in-addr.arpa /etc/bind/db.192.168` , `sudo named-checkzone 16.172.in-addr.arpa /etc/bind/db.172.16` |
+| DNS not resolving internal hostnames | First, verify bind9 is running using the command `sudo systemctl status named`. Then verify the forward zone file has the correct values by running `sudo nano /etc/bind/db.ecorp.local`. Fix any values that are incorrect and then restart bind9 using the comand `sudo systemctl restart named` |
+| DNS not resolving external hostnames | Use the command `sudo nano /etc/bind/named.conf.options` and verify the forwarders section includes 8.8.8.8 and 8.8.4.4. |
+| NTP not syncing on switches | Verify chrony is running on Ubuntu-Infra-Server with `sudo systemctl status chrony`. If it is not then run `sudo systemctl start chrony`. If it is, then run `sudo nano /etc/chrony/chrony.conf` and verify that there is `allow 192.168.0.0/16` , `allow 172.16.0.0/16` , and `allow 10.0.0.0/24`. |
+| apache2 fails to start | Verify no other service is using port 80 with `sudo ss -tlnp | grep 80`. If another service is using port 80 then run `sudo systemctl stop [service name]` then restart apache2 with `sudo systemctl restart apache2`. |
