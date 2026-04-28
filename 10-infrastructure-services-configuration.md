@@ -563,6 +563,8 @@ Then save with Ctrl+X, then y, then enter.
 
 ![](images/chronyconfigadminpcimg.PNG)
 
+![](images/chronyconfigadminpcimg1.PNG)
+
 Restart and enable chrony to run on startup with the commands:
 ```
 sudo systemctl restart chrony
