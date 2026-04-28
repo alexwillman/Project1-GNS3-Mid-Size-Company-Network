@@ -599,6 +599,8 @@ do write
 
 ![](images/ntpswitchconfig.PNG)
 
+**Note:** I am only showing the configuration of L3-Multilayer-SW1, as the commands are the same on each switch.
+
 ### L3-Multilayer-SW2
 ```
 enable
