@@ -585,7 +585,6 @@ chronyc tracking
 
 All five switches need to be configured to sync time from Ubuntu-Infra-Server. We are setting the minpoll and maxpoll options to poll more frequently to help reduce the clock offset in the lab environment.
 
-**IMPORTANT NOTE:** The virtual Cisco IOSvL2 switches in GNS3 have a known clock drift issue. The switch clock will drift too quickly to maintain synchronization with NTP. This is a GNS3 virtualization issue and will not reflect real network behavior. On physical switches NTP would synchronize correctly. The NTP configuration is correct and the server is working, we saw this by confirming the Ubuntu-Admin-PC syncing from the Ubuntu-Infra-Server. This switch NTP configuration demonstrates the correct switch configuration in a company environment, even though full synchronization will not be achieved on the switches in this virtual environment. I tried troubleshooting this issue for a while and could not find a fix.
 
 ### L3-Multilayer-SW1
 ```
