@@ -46,6 +46,19 @@ sudo hostnamectl set-hostname infra-server
 ```
 **Note:** The hostname will be updated after a reboot.
 
+Then add the hostname to the hosts file using the command:
+```
+sudo nano /etc/hosts
+```
+
+After the 127.0.0.1 localhost line, add:
+```
+127.0.1.1 infra-server
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/updatehostsfileimg1.PNG)
+
 ### Install bind9
 
 Install bind9 using the commands:
@@ -302,12 +315,17 @@ sudo nano /etc/chrony/chrony.conf
 ```
 Replace all 4 pool lines with:
 ```
-pool pool.ntp.org iburst
+pool pool.ntp.org iburst minpoll 4 maxpoll 6
 ```
 Then directly under that line, we allow internal subnets to use this server using:
 ```
 allow 192.168.0.0/16
 allow 172.16.0.0/16
+```
+
+Then change the makestep 1 3 line to:
+```
+makestep 1 -1
 ```
 Then save with Ctrl+X, then y, then enter.
 
@@ -412,9 +430,7 @@ nslookup l3-multilayer-sw1.ecorp.local
 
 ## Configuring Ubuntu-Admin-PC
 
-The Ubuntu-Admin-PC will need to be configured with a permanent static IP address to verify the services configured in this section and chrony NTP installed.
-
-### Configure a hostname
+The Ubuntu-Admin-PC will need to be configured with a permanent static IP address to verify the services configured in this section and have chrony NTP installed.
 
 Log into Ubuntu-Admin-PC using the default credentials:
 
@@ -422,11 +438,25 @@ Username: ubuntu
 
 Password: ubuntu
 
+### Configure a hostname
+
 Change the hostname using the command:
 ```
 sudo hostnamectl set-hostname admin-pc
 ```
 **Note:** The hostname will be updated after a reboot.
+
+Update the hosts file using the command:
+```
+sudo nano /etc/hosts
+```
+After the 127.0.0.1 localhost line, add:
+```
+127.0.1.1 admin-pc
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/updatehostsfileimg2.PNG)
 
 ### Disable cloud-init network management
 
@@ -444,9 +474,167 @@ Save the file with Ctrl+X, then Y, then enter.
 
 ### Configure a static IP
 
+We will use the IP address of 192.168.99.10 and a default gateway of 192.168.99.1, as written in section 02.
+
+<br>
+
 To configure a static IP, use the command:
 ```
 sudo nano /etc/netplan/50-cloud-init.yaml
 ```
+
+Then edit the file to:
+```
+network:
+  version: 2
+  ethernets:
+    ens3:
+      addresses:
+        - 192.168.99.10/24
+      routes:
+        - to: default
+          via: 192.168.99.1
+      nameservers:
+        addresses:
+          - 172.16.0.5
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/adminpcstaticipimg.PNG)
+
+Then apply the configuration with the command:
+```
+sudo netplan apply
+```
+
+### Bypass systemd-resolved
+
+Just like Ubuntu-Infra-Server, we need to bypass systemd-resolved so DNS queries will get forwarded to the DNS server directly.
+
+<br>
+
+Use the commands:
+```
+sudo unlink /etc/resolv.conf
+sudo nano /etc/resolv.conf
+```
+
+In this file, add:
+```
+nameserver 172.16.0.5
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/bypassresolvedimg2.PNG)
+
+Then verify the new IP address using the command:
+```
+ip addr show
+```
+
+![](images/verifyipadminpc.PNG)
+
+### Install and configure chrony
+
+To install chrony, use the command:
+```
+sudo apt update
+sudo apt install chrony -y
+```
+
+Then configure chrony to use Ubuntu-Infra-Server as the NTP source with the command:
+```
+sudo nano /etc/chrony/chrony.conf
+```
+
+Replace all 4 of the pool lines with:
+```
+server 172.16.0.5 iburst minpoll 4 maxpoll 6
+```
+
+Then change the makestep 1 3 line to:
+```
+makestep 1 -1
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/chronyconfigadminpcimg.PNG)
+
+Restart and enable chrony to run on startup with the commands:
+```
+sudo systemctl restart chrony
+sudo systemctl enable chrony
+```
+
+Set the timezone to US Eastern time with the command:
+```
+sudo timedatectl set-timezone America/New_York
+```
+
+To verify the timezone is set and chrony is syncing, use the commands:
+```
+timedatectl
+chronyc tracking
+```
+
+![](images/verifychronyadminpc.PNG)
+
+<br>
+
+## Configuring NTP on the Switches
+
+All five switches need to be configured to sync time from Ubuntu-Infra-Server. We are setting the minpoll and maxpoll options to poll more frequently to help reduce the clock offset in the lab environment.
+
+**IMPORTANT NOTE:** The virtual Cisco IOSvL2 switches in GNS3 have a known clock drift issue. The switch clock will drift too quickly to maintain synchronization with NTP. This is a GNS3 virtualization issue and will not reflect real network behavior. On physical switches NTP would synchronize correctly. The NTP configuration is correct and the server is working, we saw this by confirming the Ubuntu-Admin-PC syncing from the Ubuntu-Infra-Server. This switch NTP configuration demonstrates the correct switch configuration in a company environment, even though full synchronization will not be achieved on the switches in this virtual environment. I tried troubleshooting this issue for a while and could not find a fix.
+
+### L3-Multilayer-SW1
+```
+enable
+configure terminal
+
+ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
+do write
+```
+
+![](images/ntpswitchconfig.PNG)
+
+### L3-Multilayer-SW2
+```
+enable
+configure terminal
+
+ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
+do write
+```
+
+### L2-SW1
+```
+enable
+configure terminal
+
+ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
+do write
+```
+
+### L2-SW2
+```
+enable
+configure terminal
+
+ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
+do write
+```
+
+### L2-SW3
+```
+enable
+configure terminal
+
+ntp server 172.16.0.5 minpoll 4 maxpoll 6 prefer
+do write
+```
+
+
+
 
 
