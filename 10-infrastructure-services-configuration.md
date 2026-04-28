@@ -156,7 +156,7 @@ Then save with Ctrl+X, then y, then enter.
 
 Then create the forward zone file using the command:
 ```
-sudo nano /etc/bind/db.corp.local
+sudo nano /etc/bind/db.ecorp.local
 ```
 
 Edit the file to:
@@ -287,7 +287,7 @@ sudo systemctl restart named
 
 Then we can verify it is running using the command:
 ```
-systemctl status named --no-pager -l
+sudo systemctl status named --no-pager -l
 ```
 
 ![](images/enablebind9img.PNG)
@@ -317,7 +317,7 @@ Replace all 4 pool lines with:
 ```
 pool pool.ntp.org iburst minpoll 4 maxpoll 6
 ```
-Then directly under that line, we allow internal subnets to use this server using:
+Then directly under that line, we allow internal subnets and pfSense to use this server using:
 ```
 allow 192.168.0.0/16
 allow 172.16.0.0/16
