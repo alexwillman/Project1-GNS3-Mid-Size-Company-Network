@@ -332,6 +332,8 @@ Then save with Ctrl+X, then y, then enter.
 
 ![](images/chronyconfigimg.PNG)
 
+![](images/chronyconfigimg1.PNG)
+
 ### Configure a timezone (EDT/EST)
 
 To set the timezone to US Eastern time, use the command:
