@@ -393,13 +393,13 @@ Apply the new config using the command:
 sudo netplan apply
 ```
 
-### Bypass systemd-resolved
+### Configure a static resolv.conf
 
-We need to bypass systemd-resolved so DNS queries get forwarded to the DNS server directly.
+We need to edit the resolv.conf file so DNS queries get forwarded to the DNS server directly.
 
 <br>
 
-To bypass systemd-resolved, use the commands:
+To edit the static file, use the commands:
 ```
 sudo unlink /etc/resolv.conf
 sudo nano /etc/resolv.conf
@@ -510,9 +510,9 @@ Then apply the configuration with the command:
 sudo netplan apply
 ```
 
-### Bypass systemd-resolved
+### Configure a static resolv.conf
 
-Just like Ubuntu-Infra-Server, we need to bypass systemd-resolved so DNS queries will get forwarded to the DNS server directly.
+Just like Ubuntu-Infra-Server, we need to edit the resolv.conf file so DNS queries will get forwarded to the DNS server directly.
 
 <br>
 
