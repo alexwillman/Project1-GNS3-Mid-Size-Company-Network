@@ -41,3 +41,23 @@ Then save with Ctrl+X, then y, then enter.
 
 ### Disable cloud-init network management
 
+To disable cloud-init and prevent the system from overwriting the IP on boot, use the command:
+```
+sudo nano /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+```
+
+Then add this in the file:
+```
+network: {config: disabled}
+```
+Then save with Ctrl+x, then y, then enter.
+
+![](images/disablecloudinitmg.PNG)
+
+### Configure a Static IP
+
+Con
+
+
+
+
