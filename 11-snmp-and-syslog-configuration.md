@@ -87,9 +87,9 @@ Apply the configuration using the command:
 sudo netplan apply
 ```
 
-### Bypass systemd-resolved
+### Configure a static resolv.conf
 
-
+Bypassing systemd-resolved ensures that DNS
 
 
 
