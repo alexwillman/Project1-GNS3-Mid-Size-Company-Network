@@ -89,7 +89,38 @@ sudo netplan apply
 
 ### Configure a static resolv.conf
 
-Bypassing systemd-resolved ensures that DNS
+Configuring a static resolv.conf file ensures that DNS queries get forwarded directly to our DNS server.
 
+Use the commands:
+```
+sudo unlink /etc/resolv.conf
+sudo nano /etc/resolv.conf
+```
+
+Then add:
+```
+nameserver 172.16.0.5
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/configurestaticresolvconfimg.PNG)
+
+Then verify the new IP address and gateway using the commands:
+```
+ip addr show
+ip route show
+```
+
+![](images/verifyipaddrimg.PNG)
+
+### Install and configure chrony
+
+We need to install and configure chrony to use Ubuntu-Mon-Server as the time server to ensure a consistent time throughout the network devices.
+
+Install using the commands:
+```
+sudo apt update
+sudo apt install chrony -y
+```
 
 
