@@ -56,7 +56,39 @@ Then save with Ctrl+x, then y, then enter.
 
 ### Configure a Static IP
 
-Con
+Configure a static IP address using the IP address from section 02.
+
+Use the command:
+```
+sudo nano /etc/netplan/50-cloud-init.yaml
+```
+
+Then edit the file to this:
+```
+network:
+  version: 2
+  ethernets:
+    ens3:
+      addresses:
+        - 172.16.0.135/25
+      routes:
+        - to: default
+          via: 172.16.0.129
+      nameservers:
+        addresses:
+          - 172.16.0.5
+```
+Then save with Ctrl+X, then y, then enter.
+
+![](images/staticipconfigimg.PNG)
+
+Apply the configuration using the command:
+```
+sudo netplan apply
+```
+
+### Bypass systemd-resolved
+
 
 
 
