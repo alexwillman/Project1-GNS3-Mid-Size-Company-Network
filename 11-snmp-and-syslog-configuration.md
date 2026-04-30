@@ -682,5 +682,7 @@ The result should show that interface state change in the log.
 |---------|-----|
 | No storage space left on ubuntu server | Run `sudo apt clean` then run the desired command again. |
 | Unmet dependencies error | Run `sudo apt --fix-broken install -y` then run the desired command again |
+| snmpd does not start | Check the configuration file for any errors using `sudo nano /etc/snmp/snmpd.conf`. If there are incorrect values in the file fix them and then restart using the command `sudo systemctl restart snmpd`. |
+| No log files are appeaering in /var/log/remote | Update the file permissions for the directory by running `sudo chown -R syslog:adm /var/log/remote` and `sudo chmod 755 /var/log/remote`. |
 
 
