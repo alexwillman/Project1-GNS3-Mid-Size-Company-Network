@@ -69,7 +69,7 @@ The WAN interface will now have an IP address received from DHCP via the NAT nod
 
 From the console menu, select option 2: Set interface(s) IP address
 
-!!!**THE IP ADDRESS CONFIGURED SHOULD BE ON THE SAME SUBNET AS THE ADDRESS FOUND IN STEP 1**!!!
+!!!**THE IP ADDRESS CONFIGURED MUST BE ON THE SAME SUBNET AS THE ADDRESS FOUND IN STEP 1**!!!
 ```
 Enter the number of the interface you wish to configure: 2
 Configure IPv4 address LAN interface via DHCP?: n
