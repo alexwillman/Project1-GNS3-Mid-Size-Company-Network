@@ -578,8 +578,109 @@ Now restart rsyslog using the command:
 sudo systemctl restart rsyslog
 ```
 
+**Note:** You can run the command "logger -p user.warn "Test warning message from admin-pc"" on Ubuntu-Admin-PC to send a warning log to Ubuntu-Mon-Server so it appears under /var/log/remote.
+
+<br>
+
+## Configuring Syslog on pfSense
+
+Now we can configure pfSense to send all firewall logs to Ubuntu-Mon-Server
+
+In the pfSense webConfigurator:
+- Go to Status → System Logs → Settings
+- Check Enable Remote Logging
+- Enter 172.16.0.135 in the Remote log servers field
+- Under Remote Syslog Contents, check Firewall Events
+- Leave all other options unchecked
+- Click Save
+
+![](images/pfsensesyslogimg.PNG)
+
+<br>
+
+## Verification
+
+Now that SNMP and Syslog have been configured, we can verify their functionality.
+
+### Verify SNMP
+
+We can verify SNMP by polling a switch to gather data from them. We will poll L3-Multilayer-SW1. First we must install files to allow name-based OIDs to poll with.
+
+Install the files with the command:
+```
+sudo apt install snmp-mibs-downloader -y
+```
+
+Then edit the snmp.conf file to enable them using the command:
+```
+sudo nano /etc/snmp/snmp.conf
+```
+At the beginning of the line that says "mibs :" put a #:
+```
+# mibs :
+```
+Save with Ctrl+X, then y, then enter.
+
+![](images/enablemibsimg.PNG)
 
 
+**Poll system uptime:**
 
+On Ubuntu-Mon-Server, run the command:
+```
+snmpget -v2c -c ecorpSNMP 192.168.99.2 sysUpTime.0
+```
+
+**Poll hostname**
+
+Run the command:
+```
+snmpget -v2c -c ecorpSNMP 192.168.99.2 sysName.0
+```
+
+**Poll interface list**
+
+Run the command:
+```
+snmpwalk -v2c -c ecorpSNMP 192.168.99.2 ifDescr
+```
+
+A successful return on these commands shows SNMP is working correctly.
+
+![](images/pollverificationsnmpimg.PNG)
+
+### Verify Syslog
+
+We can send a syslog event by shutting down an unused interface and bringing it back up on L3-Multilayer-SW1.
+
+On L3-Multilayer-SW1, run the commands:
+```
+enable
+configure terminal
+
+interface Gi3/2
+no shutdown
+shutdown
+exit
+```
+
+Then we can check to see if the log was received by Ubuntu-Mon-Server.
+
+On Ubuntu-Mon-Server, run the command:
+```
+sudo cat /var/log/remote/172.16.0.130.log
+```
+The result should show that interface state change in the log.
+
+![](images/syslogverifyimg.PNG)
+
+<br>
+
+## Common Problems
+
+| Problem | Fix |
+|---------|-----|
+| No storage space left on ubuntu server | Run `sudo apt clean` then run the desired command again. |
+| Unmet dependencies error | Run `sudo apt --fix-broken install -y` then run the desired command again |
 
 
