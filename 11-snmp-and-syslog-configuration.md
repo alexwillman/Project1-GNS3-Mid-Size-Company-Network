@@ -578,7 +578,7 @@ Now restart rsyslog using the command:
 sudo systemctl restart rsyslog
 ```
 
-**Note:** You can run the command "logger -p user.warn "Test warning message from admin-pc"" on Ubuntu-Admin-PC to send a warning log to Ubuntu-Mon-Server so it appears under /var/log/remote.
+**Note:** You can run the command `logger -p user.warn "Test warning message from admin-pc"` on Ubuntu-Admin-PC to send a warning log to Ubuntu-Mon-Server so it appears under /var/log/remote.
 
 <br>
 
