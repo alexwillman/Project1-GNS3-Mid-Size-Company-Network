@@ -8,7 +8,7 @@ This section will cover the traffic rules, replacing the temporary firewall rule
 
 ## ACL and Firewall Rule Summary
 
-This design provides isolation of department VLANs, access to the internet, control over inter-VLAN communication, access to necessary services, and control over ICMP traffic to restrict unnecessary pings from department VLANs and allow necessary troubleshooting pings for IT, Management, and servers. As this is a lab environment, this is a very simple version of the rules required. Production environments would require more complex rule sets for security.
+This design provides isolation of department VLANs, access to the internet, control over inter-VLAN communication, access to necessary services and routing protocols, and control over ICMP traffic to restrict unnecessary pings from department VLANs and allow necessary troubleshooting pings for IT, Management, and servers. As this is a lab environment, this is a very simple version of the rules required. Production environments would require more complex rule sets for security.
 
 <br>
 
@@ -224,4 +224,254 @@ pfSense should still apear as a FULL neighbor.
 
 ## Configuring ACLs on L3-Multilayer-SW1
 
+ACLs are applied on each VLAN SVI to filter traffic as it enters the switch from the VLAN. Since both layer 3 switches can act as the sole switch in a failover scenario, the same ACLs must be applied to both layer 3 switches.
+
+<br>
+
+### VLAN 10 - HR (restricted)
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN10-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any 192.168.3.0 0.0.0.255 echo-reply
+permit icmp any 192.168.99.0 0.0.0.255 echo-reply
+deny icmp any any
+permit tcp any any established
+permit udp any host 172.16.0.5 eq 67
+permit udp any host 172.16.0.5 eq 68
+permit udp any host 172.16.0.5 eq 53
+permit tcp any host 172.16.0.5 eq 53
+permit udp any host 172.16.0.5 eq 123
+permit tcp any host 172.16.0.5 eq 80
+permit udp any host 172.16.0.135 eq 514
+permit udp any host 172.16.0.135 eq 162
+deny ip any 172.16.0.0 0.0.0.127
+deny ip any 172.16.0.128 0.0.0.127
+deny ip any host 192.168.99.10
+deny ip any 192.168.0.0 0.0.0.255
+deny ip any 192.168.1.0 0.0.0.255
+deny ip any 192.168.2.0 0.0.0.255
+deny ip any 192.168.3.0 0.0.0.255
+permit ip any any
+
+exit
+
+interface Vlan10
+ip access-group VLAN10-IN in
+exit
+do write
+```
+
+![](images/VLAN10ACLimg.PNG)
+
+### VLAN 20 - Sales (restricted)
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN20-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any 192.168.3.0 0.0.0.255 echo-reply
+permit icmp any 192.168.99.0 0.0.0.255 echo-reply
+deny icmp any any
+permit tcp any any established
+permit udp any host 172.16.0.5 eq 67
+permit udp any host 172.16.0.5 eq 68
+permit udp any host 172.16.0.5 eq 53
+permit tcp any host 172.16.0.5 eq 53
+permit udp any host 172.16.0.5 eq 123
+permit tcp any host 172.16.0.5 eq 80
+permit udp any host 172.16.0.135 eq 514
+permit udp any host 172.16.0.135 eq 162
+deny ip any 172.16.0.0 0.0.0.127
+deny ip any 172.16.0.128 0.0.0.127
+deny ip any host 192.168.99.10
+deny ip any 192.168.0.0 0.0.0.255
+deny ip any 192.168.1.0 0.0.0.255
+deny ip any 192.168.2.0 0.0.0.255
+deny ip any 192.168.3.0 0.0.0.255
+permit ip any any
+
+exit
+
+interface Vlan20
+ip access-group VLAN20-IN in
+exit
+do write
+```
+
+![](images/VLAN20ACLimg.PNG)
+
+### VLAN 30 - Finance (restricted)
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN30-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any 192.168.3.0 0.0.0.255 echo-reply
+permit icmp any 192.168.99.0 0.0.0.255 echo-reply
+deny icmp any any
+permit tcp any any established
+permit udp any host 172.16.0.5 eq 67
+permit udp any host 172.16.0.5 eq 68
+permit udp any host 172.16.0.5 eq 53
+permit tcp any host 172.16.0.5 eq 53
+permit udp any host 172.16.0.5 eq 123
+permit tcp any host 172.16.0.5 eq 80
+permit udp any host 172.16.0.135 eq 514
+permit udp any host 172.16.0.135 eq 162
+deny ip any 172.16.0.0 0.0.0.127
+deny ip any 172.16.0.128 0.0.0.127
+deny ip any host 192.168.99.10
+deny ip any 192.168.0.0 0.0.0.255
+deny ip any 192.168.1.0 0.0.0.255
+deny ip any 192.168.2.0 0.0.0.255
+deny ip any 192.168.3.0 0.0.0.255
+permit ip any any
+
+exit
+
+interface Vlan30
+ip access-group VLAN30-IN in
+exit
+do write
+```
+
+![](images/VLAN30ACLimg.PNG)
+
+### VLAN 40 - IT (full access)
+
+**Note:** For lab purposes, the IT department will have full access to devices and servers.
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN40-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any any
+permit tcp any any established
+permit udp any host 172.16.0.135 eq 514
+permit udp any any eq 161
+permit ip any any
+
+exit
+
+interface Vlan40
+ip access-group VLAN40-IN in
+exit
+do write
+```
+
+![](images/VLAN40ACLimg.PNG)
+
+### VLAN 50 - Infrastructure Server
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN50-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any any
+permit tcp any any established
+permit udp host 172.16.0.5 eq 53 any
+permit tcp host 172.16.0.5 eq 53 any
+permit udp host 172.16.0.5 eq 123 any
+permit udp any host 172.16.0.135 eq 514
+permit udp any host 172.16.0.135 eq 162
+permit udp host 172.16.0.5 host 172.16.0.135 eq 514
+deny ip any any
+
+exit
+
+interface Vlan50
+ip access-group VLAN50-IN in
+exit
+do write
+```
+
+![](images/VLAN50ACLimg.PNG)
+
+### VLAN 60 - Monitoring Server
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN60-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any any
+permit tcp any any established
+permit udp host 172.16.0.135 any eq 161
+permit udp any host 172.16.0.135 eq 514
+permit udp host 172.16.0.135 host 172.16.0.5 eq 53
+permit udp host 172.16.0.135 host 172.16.0.5 eq 123
+deny ip any any
+
+exit
+
+interface Vlan60
+ip access-group VLAN60-IN in
+exit
+do write
+```
+
+![](images/VLAN60ACLimg.PNG)
+
+### VLAN 99 - Management (full access)
+
+```
+enable
+configure terminal
+
+ip access-list extended VLAN99-IN
+
+permit ospf any any
+permit udp any host 224.0.0.102 eq 1985
+permit icmp any any echo
+deny icmp any any echo-reply
+permit icmp any any
+permit tcp any any established
+permit udp host 192.168.99.2 eq 161 host 172.16.0.135
+permit udp host 192.168.99.3 eq 161 host 172.16.0.135
+permit udp host 192.168.99.4 eq 161 host 172.16.0.135
+permit udp host 192.168.99.5 eq 161 host 172.16.0.135
+permit udp host 192.168.99.6 eq 161 host 172.16.0.135
+permit udp any host 172.16.0.135 eq 514
+permit ip any any
+
+exit
+
+interface Vlan99
+ip access-group VLAN99-IN in
+exit
+do write
+```
+
+![](images/VLAN99ACLimg.PNG)
+
+## Configuring ACLs on L3-Multilayer-SW2
+
+L3-Multilayer-SW2 will have the exact same ACLs applied including names and rules. Both switches will need the same ACLs for normal operation and in case of a failover.
+
+**Run all of the same commands as the previous step on L3-Multilayer-SW2** 
 
