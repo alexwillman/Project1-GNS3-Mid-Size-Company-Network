@@ -577,7 +577,7 @@ The command should bring up the HTML content of our web page which verifies it c
 
 ### Verify SSH from Ubuntu-Admin-PC
 
-To verify SSH is working on Ubuntu-Admin-PC, we can to SSH into L3-Multilayer-SW1.
+To verify SSH is working on Ubuntu-Admin-PC, we can SSH into L3-Multilayer-SW1.
 
 On Ubuntu-Admin-PC, run:
 ```
@@ -606,8 +606,9 @@ This shows the hit counts of traffic matching the ACL rules we set.
 
 | Problem | Fix |
 |---------|-----|
-| Department devices cannot reach DHCP server after ACLs | Verify the DHCP permit rules are in the department ACLs. Also verify that there is a ACL rule permitting DHCP return traffic on the VLAN 50 ACL. |
+| Department devices cannot reach DHCP server after ACLs | Verify the DHCP permit rules are in the department ACLs. Also verify that there is an ACL rule permitting DHCP return traffic on the VLAN 50 ACL. |
 | ACL blocking OSPF or HSRP | Verify the OSPF and HSRP permit rules are at the top of each ACL |
 | OSPF getting dropped after firewall rules applied | Verify OSPF and OSPF multicast rules are at the top of each firewall rule set. |
-| IT cant reach devices | Verify the VLAN 40 ACL has a `permit ip any any` rule at the bottom. Also verify it has a `permit icmp any any` rule. And verify the ACL was applied inbound using `show ip interface vlan 40`. The inbound access list should be set to `VLAN40-IN`. |
-| DNS not resolving after ACLs | Verify the department and Infrastructure Server VLANs have a `permit udp any host 172.16.0.5 eq 53` and `permit tcp any host 172.16.0.5 eq 53` rule, because DNS uses both TCP and UDP. |
+| IT can't reach devices | Verify the VLAN 40 ACL has a `permit ip any any` rule at the bottom. Also verify it has a `permit icmp any any` rule. And verify the ACL was applied inbound using `show ip interface vlan 40`. The inbound access list should be set to `VLAN40-IN`. |
+| DNS not resolving after ACLs | For department VLANs verify the ACL has `permit udp any host 172.16.0.5 eq 53` and `permit tcp any host 172.16.0.5 eq 53` to allow DNS queries to the Infra Server. For the VLAN 50 ACL verify it has `permit udp host 172.16.0.5 any` to allow bind9 to send outbound DNS queries to external forwarders and `permit udp any host 172.16.0.5` to allow DNS responses back. |
+| NTP not syncing on switches after ACLs applied | The VLAN 50 ACL may be blocking outbound UDP traffic from Ubuntu-Infra-Server. Verify the ACL has `permit udp host 172.16.0.5 any` to allow all outbound UDP from the Infra Server and `permit udp any host 172.16.0.5` to allow all UDP return traffic back to the Infra Server. After the ACL is fixed restart chrony with `sudo systemctl restart chrony`. |
