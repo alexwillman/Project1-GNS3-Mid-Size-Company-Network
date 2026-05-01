@@ -87,7 +87,7 @@ Download and install GNS3 and the matching GNS3 VM from [gns3.com](https://www.g
 ### 3. Import the project
 
 - Clone or download this repository
-- In GNS3, go to File → Open Project and select the .gns3 project file
+- In GNS3, go to File → Open Project and select the EcorpLab-Fresh.gns3 project file
 
 
 ## License
