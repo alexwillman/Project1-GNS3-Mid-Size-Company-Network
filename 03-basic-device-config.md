@@ -20,7 +20,7 @@ You can use any password you would like for this lab. Common passwords are not r
 
 ## Setting the Hostname 
 
-The hostname is configured on each device to ensure you know which device you are currently configuring. The hostname should be configured on each device and match the topology.
+The hostname is configured on each device to ensure you know which device you are currently configuring. **The hostname should be configured on each device and match the topology.**
 
 ### Commands:
 ```
@@ -47,7 +47,7 @@ write memory
 
 ## Setting the Enable Secret and Encrypting Passwords
 
-The enable secret encrypts the privileged EXEC password using MD5 (Type 5). Apply to each switch.
+The enable secret encrypts the privileged EXEC password using MD5 (Type 5). **Apply to each switch.**
 
 ### Commands: 
 
@@ -65,7 +65,7 @@ Password is covered for security purposes.
 ## Configuring the Console Line
 
 We will secure the console port using a password, set the session timeout to 10 minutes of inactivity, and disable syslog messages to avoid typing disruption. The console password is plaintext by default so service password-encryption applies Type 7 encryption to it. Type 7 is a very weak encryption algorithm so in a production environment you would use login local instead to authenticate against the MD5 encrypted local user database. This lab uses a separate console password to avoid a dependency on the SSH username which is configured in the next step.
-Apply to each switch.
+**Apply to each switch.**
 
 ### Commands:
 
@@ -83,7 +83,7 @@ logging synchronous
 
 ## Configuring SSH
 
-SSH allows the secure remote access from the Ubuntu-Admin-PC. Privilege 15 grants full administrative access and secret encrypts the password so it is not stored in plaintext. Apply this to each switch to allow SSH access.
+SSH allows the secure remote access from the Ubuntu-Admin-PC. Privilege 15 grants full administrative access and secret encrypts the password so it is not stored in plaintext. **Apply this to each switch to allow SSH access.**
 
 ### Commands: 
 
@@ -107,7 +107,7 @@ do write
 
 ## Configuring the Login Banner
 
-The banner is displayed before you login to the device and is a legal warning to display that access is for authorized users only. You should never use welcoming language. Apply this to each switch.
+The banner is displayed before you login to the device and is a legal warning to display that access is for authorized users only. You should never use welcoming language. **Apply this to each switch.**
 
 ### Commands: 
 
@@ -129,7 +129,7 @@ To confirm that this worked, log out of the switch and before you enter your pas
 
 ## Shutting down unused ports
 
-For security purposes, unused ports are administratively shut down and put into an unused VLAN so unauthorized devices cannot gain access from that unused port. This is applied to each unused port on each switch.
+For security purposes, unused ports are administratively shut down and put into an unused VLAN so unauthorized devices cannot gain access from that unused port. **This is applied to each unused port on each switch.**
 
 **Create the black hole VLAN:**
 
