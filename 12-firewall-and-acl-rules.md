@@ -394,6 +394,7 @@ permit tcp any any established
 permit udp host 172.16.0.5 eq 53 any
 permit tcp host 172.16.0.5 eq 53 any
 permit udp host 172.16.0.5 eq 123 any
+permit udp host 172.16.0.5 eq 67 any
 permit udp any host 172.16.0.135 eq 514
 permit udp any host 172.16.0.135 eq 162
 permit udp host 172.16.0.5 host 172.16.0.135 eq 514
@@ -401,7 +402,7 @@ deny ip any any
 
 exit
 
-interface Vlan50
+interface Vlan50 
 ip access-group VLAN50-IN in
 exit
 do write
@@ -469,9 +470,136 @@ do write
 
 ![](images/VLAN99ACLimg.PNG)
 
+<br>
+
 ## Configuring ACLs on L3-Multilayer-SW2
 
 L3-Multilayer-SW2 will have the exact same ACLs applied including names and rules. Both switches will need the same ACLs for normal operation and in case of a failover.
 
 **Run all of the same commands as the previous step on L3-Multilayer-SW2** 
+
+<br>
+
+## Verification
+
+To verify access lists and rules were applied correctly, run this command on each switch:
+```
+show access-lists
+```
+
+Then before running the verification commands, we can clear the previous ACL hit counters to verify if our rules are being matched.
+
+Run the commands:
+```
+enable
+clear ip access-list counters
+```
+
+### Verify department isolation
+
+To verify PC1-HR cannot ping PC2-Sales run this command on PC1-HR:
+
+**Note:** If you do not have an IP address on PC1-HR currently then run "ip dhcp"
+```
+ping 192.168.1.11
+```
+
+The ping is expected to fail. Department VLANs cannot reach each other and ICMP pings are blocked by the ACL.
+
+![](images/verifydepartmentisolationimg.PNG)
+
+### Verify IT has full access
+
+To verify PC4-IT can ping other VLANs run these commands on PC4-IT
+```
+ping 192.168.0.11
+ping 192.168.1.11
+ping 192.168.2.11
+ping 172.16.0.5
+ping 172.16.0.135
+```
+
+A successful ping confirms IT has full ICMP access to all other VLANs.
+
+![](images/verifyitfullaccessimg.PNG)
+
+### Verify departments have internet access
+
+Since we blocked all pings on department devices, we can test internet connectivity on them through the layer 3 switch.
+
+On L3-Multilayer-SW1, run the command:
+```
+ping 8.8.8.8 source vlan 10
+ping 8.8.8.8 source vlan 20
+ping 8.8.8.8 source vlan 30
+```
+**Note:** This pings the internet as if the traffic was coming from VLANs 10, 20, 30 respectively.
+
+A successful ping confirms the departments still have internet access.
+
+![](images/verifydepartmentsinternetconnectivityimg.PNG)
+
+### Verify Server Access
+
+To verify DHCP can still be accessed, we can request an IP address from a department end device.
+
+On PC2-Sales, run the command:
+```
+ip dhcp
+```
+The device is expected to receive an IP address through DHCP. This confirms end devices can still reach the Infrastructure Server for DHCP requests.
+
+![](images/verifydhcpafterACLimg.PNG)
+
+We can also verify DNS is resolving hostnames on the department devices. Even though pings are blocked on these devices, we can use a ping to tell us if DNS is still resolving hostnames.
+
+On PC2-Sales, run the command:
+```
+ping www.ecorp.local
+```
+
+The ping is expected to fail due to the ACL, but it will tell us that www.ecorp.local was resolved to ubuntu-infra-server.ecorp.local.
+
+![](images/verifyDNSafterACLimg.PNG)
+
+### Verify HTTP from Ubuntu-Admin-PC
+
+To verify HTTP, we can try and bring up the web page we configured from Ubuntu-Admin-PC.
+
+On Ubuntu-Admin-PC, run the command:
+```
+curl http://www.ecorp.local
+```
+
+The command should bring up the HTML content of our web page which verifies it can access HTTP on the Infrastructure Server.
+
+![](images/verifyhttpafterACLimg.PNG)
+
+### Verify SSH from Ubuntu-Admin-PC
+
+To verify SSH is working on Ubuntu-Admin-PC, we can to SSH into L3-Multilayer-SW.
+
+On Ubuntu-Admin-PC, run:
+```
+ssh -oKexAlgorithms=+diffie-hellman-group14-sha1 -oHostKeyAlgorithms=+ssh-rsa ecorpadmin@192.168.99.2
+```
+**Note:** The `-oKexAlgorithms` and `-oHostKeyAlgorithms` flags are required because modern Ubuntu SSH has dropped support for the older key exchange and host key algorithms used by Cisco IOSvL2. The regular `ecorpadmin@192.168.99.2` command would fail with a key negotiation error. This is only a compatibility issue between new OpenSSH clients and older Cisco IOS SSH.
+
+A successful login confirms that SSH is working on management VLAN 99.
+
+![](images/verifySSHafterACLimg.PNG)
+
+### Check ACL hit counts
+
+On both layer 3 switches, run the command:
+```
+show ip access-lists
+```
+
+This shows the hit counts of traffic matching the ACL rules we set.
+
+![](images/showipaccesslistsimg.PNG)
+
+**Note:** The output is very long so I will only be showing part of it.
+
 
