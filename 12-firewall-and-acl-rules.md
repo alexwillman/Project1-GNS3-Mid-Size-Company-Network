@@ -210,7 +210,7 @@ enable
 
 show ip ospf neighbor
 ```
-pfSense should still apear as a FULL neighbor.
+pfSense should still appear as a FULL neighbor.
 
 **L3-Multilayer-SW1:**
 
@@ -577,7 +577,7 @@ The command should bring up the HTML content of our web page which verifies it c
 
 ### Verify SSH from Ubuntu-Admin-PC
 
-To verify SSH is working on Ubuntu-Admin-PC, we can to SSH into L3-Multilayer-SW.
+To verify SSH is working on Ubuntu-Admin-PC, we can to SSH into L3-Multilayer-SW1.
 
 On Ubuntu-Admin-PC, run:
 ```
