@@ -589,6 +589,60 @@ A successful login confirms that SSH is working on management VLAN 99.
 
 ![](images/verifySSHafterACLimg.PNG)
 
+### Verify Server internet access
+
+On Ubuntu-Infra-Server, run the command:
+```
+ping 8.8.8.8
+```
+
+A successful ping verifies the Infrastructure Server has internet connectivity.
+
+![](images/verifyinternetinfraserverimg.PNG)
+
+### Verify NTP from all devices
+
+We need to verify the ACLs are not blocking any device from NTP access.
+
+On each switch, run the command
+```
+show ntp status
+```
+Each switch should show synchronized and its reference is 172.16.0.5.
+
+![](images/verifyNTPafterACLimg.PNG)
+
+Now we can verify NTP on each server.
+
+On Ubuntu-Infra-Server, run the command:
+```
+chronyc tracking
+```
+The output should show the Infrastructure Server is receiving NTP from a source. (the source is not always the same, it uses the source with the closest time approximation)
+
+![](images/verifyNTPafterACLimg2.PNG)
+
+On Ubuntu-Admin-PC, run the command:
+```
+chronyc tracking
+```
+The output should show the Admin PC is syncing to the Infrastructure Server.
+
+![](images/verifyNTPafterACLimg1.PNG)
+
+### Verify SNMP
+
+To verify SNMP traffic is still allowed on the network, we can use Ubuntu-Mon-Server to poll L3-Multilayer-SW1.
+
+On Ubuntu-Mon-Server, run the commands:
+```
+snmpget -v2c -c ecorpSNMP 192.168.99.2 sysUpTime.0
+snmpget -v2c -c ecorpSNMP 192.168.99.2 sysName.0
+```
+These commands should successfully return the device information and prove that SNMP is working.
+
+![](images/verifySNMPafterACLimg.PNG)
+
 ### Check ACL hit counts
 
 On both layer 3 switches, run the command:
