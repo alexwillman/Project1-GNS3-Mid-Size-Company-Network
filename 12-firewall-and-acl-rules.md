@@ -12,7 +12,7 @@ This design provides isolation of department VLANs, access to the internet, cont
 
 <br>
 
-| Source | Internet | Other Departments | Servers (DNS/NTP/HTTP) | Server SSH | Admin PC | IT/Management VLANs | ICMP |
+| Source | Internet | Other Departments | Servers (DNS/DHCP/NTP/HTTP) | Server SSH | Admin PC | IT/Management VLANs | ICMP |
 |--------|----------|-------------------|------------------------|------------|----------|---------------|------|
 | Department VLANs 10/20/30 | Allow | Deny | Allow | Deny | Deny | Deny | Echo-reply to VLAN 40,99 only |
 | IT VLAN 40 | Allow | Allow | Allow | Allow | Allow | Allow | Allow all |
@@ -602,4 +602,12 @@ This shows the hit counts of traffic matching the ACL rules we set.
 
 **Note:** The output is very long so I will only be showing part of it.
 
+## Common Problems
 
+| Problem | Fix |
+|---------|-----|
+| Department devices cannot reach DHCP server after ACLs | Verify the DHCP permit rules are in the department ACLs. Also verify that there is a ACL rule permitting DHCP return traffic on the VLAN 50 ACL. |
+| ACL blocking OSPF or HSRP | Verify the OSPF and HSRP permit rules are at the top of each ACL |
+| OSPF getting dropped after firewall rules applied | Verify OSPF and OSPF multicast rules are at the top of each firewall rule set. |
+| IT cant reach devices | Verify the VLAN 40 ACL has a `permit ip any any` rule at the bottom. Also verify it has a `permit icmp any any` rule. And verify the ACL was applied inbound using `show ip interface vlan 40`. The inbound access list should be set to `VLAN40-IN`. |
+| DNS not resolving after ACLs | Verify the department and Infrastructure Server VLANs have a `permit udp any host 172.16.0.5 eq 53` and `permit tcp any host 172.16.0.5 eq 53` rule, because DNS uses both TCP and UDP. |
