@@ -391,9 +391,9 @@ permit ospf any any
 permit udp any host 224.0.0.102 eq 1985
 permit icmp any any
 permit tcp any any established
-permit udp host 172.16.0.5 eq 53 any
+permit udp host 172.16.0.5 any
+permit udp any host 172.16.0.5
 permit tcp host 172.16.0.5 eq 53 any
-permit udp host 172.16.0.5 eq 123 any
 permit udp host 172.16.0.5 eq 67 any
 permit udp any host 172.16.0.135 eq 514
 permit udp any host 172.16.0.135 eq 162
