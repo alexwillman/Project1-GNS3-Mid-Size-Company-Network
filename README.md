@@ -4,7 +4,7 @@
 
 ## Project Overview
 
-This lab is designed to give CCNA students a free lab to build and practice networking and virtualization skills on a simulated company network. The scenario for this project is that a mid-size single site company with HR, Sales, Finance, and IT departments need a network designed with internal servers, secure segmentation, reliable routing, high availability, network monitoring, and a logging system. For this scenario, the external services such as public DNS, email, file storage, and internet are assumed to be handled by third-party companies and are outside the scope of this lab.
+This lab is designed to give CCNA students a free lab to build and practice networking and virtualization skills on a simulated company network. The scenario for this project is that a mid-size single site company with HR, Sales, Finance, and IT departments need a network designed with internal servers, secure segmentation, reliable routing, high availability, network monitoring, and a logging system. For this scenario, the external services such as email, file storage, and internet are assumed to be handled by third-party companies and are outside the scope of this lab.
 
 Every device in the lab except the NAT node requires full configuration. The NAT node is pre-configured through GNS3 and provides NAT access to the network. This lab is configured from the ground up, making it a valuable learning exercise for both myself and other CCNA students. 
 
