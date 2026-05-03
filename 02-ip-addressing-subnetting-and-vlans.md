@@ -36,9 +36,9 @@ switch SVI addresses. If the active switch fails, HSRP automatically changes the
 
 | Device | Interface | VLAN | IP Address | Subnet Mask | Default Gateway |
 |--------|-----------|------|------------|-------------|-----------------|
-| Ubuntu-Infra-Server | e0 | 50 | 172.16.0.5 | 255.255.255.128 | 172.16.0.1 |
-| Ubuntu-Mon-Server | e0 | 60 | 172.16.0.135 | 255.255.255.128 | 172.16.0.129 |
-| Ubuntu-Admin-PC | e0 | 99 | 192.168.99.10 | 255.255.255.0 | 192.168.99.1 |
+| Ubuntu-Infra-Server | ens3 | 50 | 172.16.0.5 | 255.255.255.128 | 172.16.0.1 |
+| Ubuntu-Mon-Server | ens3 | 60 | 172.16.0.135 | 255.255.255.128 | 172.16.0.129 |
+| Ubuntu-Admin-PC | ens3 | 99 | 192.168.99.10 | 255.255.255.0 | 192.168.99.1 |
 | L2-SW1 | Vlan99 | 99 | 192.168.99.4 | 255.255.255.0 | 192.168.99.1 |
 | L2-SW2 | Vlan99 | 99 | 192.168.99.5 | 255.255.255.0 | 192.168.99.1 |
 | L2-SW3 | Vlan99 | 99 | 192.168.99.6 | 255.255.255.0 | 192.168.99.1 |
