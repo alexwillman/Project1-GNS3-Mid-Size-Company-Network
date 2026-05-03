@@ -46,7 +46,7 @@ Each VLAN should be listed with the correct number and name. If it does not incl
 
 ## Configuring the Single Trunk Ports
 
-Trunk ports carry traffic for multiple VLANs between the switches. All trunk ports use VLAN 666 as the native VLAN and allow only the active VLANs. Using VLAN 1 as the native VLAN is a security risk and could allow VLAN hopping attacks that exploit the default native VLAN, so we remove it from each trunk link. We also remove VLAN 999 because the unused ports are in this VLAN and should never cross a trunk link.
+Trunk ports carry traffic for multiple VLANs between the switches. All trunk ports use VLAN 666 as the native VLAN and allow only the active VLANs. Using VLAN 1 as the native VLAN is a security risk and could allow VLAN hopping attacks that exploit the default native VLAN, so we remove it from each trunk link. We also remove VLAN 999 because the unused ports are in this VLAN and they should never cross a trunk link.
 
 This section only includes the single link trunk port configuration. The EtherChannel interfaces are configured and trunked in section 05. Do not configure any of the individual EtherChannel interfaces yet.
 
