@@ -66,7 +66,7 @@ no shutdown
 exit
 do write
 ```
-**Note:** After configuring the 'switchport trunk native vlan 666' command, you will get an error because the native VLAN is not the same on both sides of the link. Once you configure the native VLAN on L2-SW3 Gi2/0, the error will clear and STP will unblock the port.
+**Note:** After configuring the 'switchport trunk native vlan 666' command, you will get an error because the native VLAN is not the same on both sides of the link. Once you configure the native VLAN on the other side of the link, the error will clear and STP will unblock the port.
 
 ![](images/L3SW1singletrunkportsimg.PNG)
 
