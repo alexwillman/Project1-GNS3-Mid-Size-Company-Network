@@ -74,6 +74,7 @@ Enter the number of the interface you wish to configure: 1
 Configure IPv4 address WAN interface via DHCP?: y
 Configure IPv6 address WAN interface via DHCP6?: n
 Enter the new WAN IPv6 address: (press enter for none)
+Do you want to revert to HTTP as the webConfigurator protocol?: y
 ```
 The WAN interface will now have an IP address received from DHCP via the NAT node
 
