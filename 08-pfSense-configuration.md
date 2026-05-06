@@ -39,7 +39,19 @@ The new topology should look like this:
 
 ![](images/addcloudnodetopology.PNG)
 
-### Step 3: Assign pfSense Interfaces in the pfSense Console Menu
+### Step 3: Install pfSense
+
+- Click the pfSense node to start the install for pfSense.
+- Press enter when Install pfSense is highlighted
+- Then select the Auto (UFS) option and press enter
+- Press enter on the Entire Disk option
+- Highlight the GPT GUID Partition Table and press enter
+- Select the Auto option and press enter
+- Press enter on Finish
+- Press enter on Commit
+- When it loads press enter on reboot
+
+### Step 4: Assign pfSense Interfaces in the pfSense Console Menu
 
 After loading up pfSense, select option 1: Assign Interfaces
 ```
@@ -52,7 +64,7 @@ Enter optional interface 3: (skip by pressing enter)
 Do you want to proceed?: y
 ```
 
-### Step 4: Set WAN and LAN IP addresses in the pfSense Console Menu
+### Step 5: Set WAN and LAN IP addresses in the pfSense Console Menu
 
 **WAN interface (em0) connecting to NAT node:**
 
