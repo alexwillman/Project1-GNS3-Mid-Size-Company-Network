@@ -86,7 +86,7 @@ From the console menu, select option 2: Set interface(s) IP address
 ```
 Enter the number of the interface you wish to configure: 2
 Configure IPv4 address LAN interface via DHCP?: n
-Enter the new LAN IPv4 address: 192.168.245.2
+Enter the new LAN IPv4 address: [one address above the IP address found in step 1]
 Enter the new LAN IPv4 subnet bit count: 24
 Enter the new LAN IPv4 upstream gateway address: (press enter for none)
 Configure IPv6 address LAN interface via DHCP6?: n
