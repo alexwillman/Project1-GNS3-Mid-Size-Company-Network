@@ -115,6 +115,8 @@ Log in to pfSense with these default credentials:
 
 **Note:** In a production environment the username and password should be changed to something secure but for lab purposes you can leave it at default if you would like.
 
+If a setup wizard appears just click next with all the default options.
+
 ### Assign OPT1 (em2) and OPT2 (em3) Interfaces
 
 - Go to Interfaces → Assignments
