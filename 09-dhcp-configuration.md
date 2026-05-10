@@ -2,7 +2,13 @@
 
 DHCP (Dynamic Host Configuration Protocol) automatically assigns IP addresses to devices when they connect to the network. Without it, all of the department workstations would need to be manually configured with ip addresses, subnet masks, default gateways, and other network settings like DNS and NTP servers. The Ubuntu-Infra-Server will be acting as the DHCP server for each department VLAN and be assigning available addresses from the DHCP pool once the device connects to the network. Since the DHCP server is on a separate VLAN, the layer 3 core switches will relay the DHCP requests to the server.
 
-This section will cover configuring a static IP on Ubuntu-Infra-Server, installing isc-dhcp-server on Ubuntu-Infra-Server, configuring the DHCP pools for the department VLANs, configuring DHCP relay using 'ip helper-address' on the layer 3 core switches, verifying the workstations receive addresses through DHCP, and confirming network connectivity through ping testing.
+This section will cover:
+- Configuring a static IP on Ubuntu-Infra-Server
+- Installing isc-dhcp-server on Ubuntu-Infra-Server
+- Configuring the DHCP pools for the department VLANs
+- Configuring DHCP relay using 'ip helper-address' on the layer 3 core switches
+- Verifying the workstations receive addresses through DHCP
+- Confirming network connectivity through ping testing.
 
 <br>
 
