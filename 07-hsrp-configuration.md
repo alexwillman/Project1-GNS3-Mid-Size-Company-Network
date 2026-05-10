@@ -2,7 +2,11 @@
 
 HSRP (Hot Standby Router Protocol) is a protocol that provides redundancy for the network by creating a virtual IP address that is shared between the two core switches with one acting as the active and the other as the standby. If the active core switch goes down the standby takes over as the gateway. The end devices use the virtual IP as their default gateway so no changes will be needed on devices if one core switch goes down. HSRP will switch the virtual IP address automatically. In this topology, we will be dedicating one of the core switches to be active for VLANs 10, 20, 30, and 99, and the other switch active for VLANs 40, 50, and 60, to align with the STP root bridge assignments from section 05. This ensures that both switches are handling traffic rather than one sitting idle as a backup.
 
-In this section we will cover the configuration of HSRP, verification of HSRP, ping tests, and failover tests to confirm connectivity.
+In this section we will cover:
+- Configuration of HSRP
+- Verification of HSRP
+- Ping tests
+- Failover tests
 
 <br>
 
