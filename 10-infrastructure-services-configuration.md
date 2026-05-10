@@ -2,7 +2,14 @@
 
 DNS, HTTP, and NTP services must be configured for the network to function properly. DNS will resolve the hostnames to their IP address, HTTP will provide a internal web server that serves a simple internal site, and NTP will keep all devices synchronized to the same time so the Syslog logs will show the accurate time. the Ubuntu-Admin-PC will need to be configured with a static IP address in order to verify configuration.
 
-This section will cover installing and configuring the bind9 DNS server, installing and configuring the chrony NTP server, updating the name server address on Ubuntu-Infra-Server, the static IP address configuration of the Ubuntu-Admin-PC, configuring NTP on each switch and pfSense, installing and configuring the apache2 web server, and verifying the configurations were successful.
+This section will cover:
+- Installing and configuring the bind9 DNS server
+- Installing and configuring the chrony NTP server
+- Updating the name server address on Ubuntu-Infra-Server
+- The static IP address configuration of the Ubuntu-Admin-PC
+- Configuring NTP on each switch and pfSense
+- Installing and configuring the apache2 web server
+- Verifying the configurations were successful
 
 <br>
 
