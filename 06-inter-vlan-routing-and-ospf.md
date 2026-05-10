@@ -1,6 +1,13 @@
 # Inter-VLAN Routing and OSPF
 
-This section covers the layer 3 configuration in the network and how communication is provided between VLANs and devices in the network. This includes enabling IP routing on the core switches to let them operate as layer 3 devices, configuring interfaces for the uplinks to the pfSense firewall, configuring SVIs for each VLAN, configuring management SVIs, and configuring OSPF for routing across the network. Basic connectivity between devices will be verified in this section. The end will list common problems when configuring this section.
+This section covers the layer 3 configuration in the network and how communication is provided between VLANs and devices in the network. This includes:
+- Enabling IP routing on the core switches to let them operate as layer 3 devices
+- Configuring interfaces for the uplinks to the pfSense firewall
+- Configuring SVIs for each VLAN
+- Configuring management SVIs
+- Configuring OSPF for routing across the network
+- Verification of basic connectivity between devices
+- Common problems encountered in this section
 
 <br>
 
