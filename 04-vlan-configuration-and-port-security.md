@@ -1,6 +1,12 @@
 # VLAN Configuration and Port Security
 
-VLANs divide the network into logical segments to isolate department traffic and improve network performance and security. This section covers the VLAN configuration for all five switches. This includes creating VLANs, configuring trunk ports, configuring access ports, and enabling port security on access ports. VLANs must be created and configured before any routing or switching protocols are configured in later sections.
+VLANs divide the network into logical segments to isolate department traffic and improve network performance and security. This section covers the VLAN configuration for all five switches. This includes:
+- Creating VLANs
+- Configuring trunk ports
+- Configuring access ports
+- Enabling port security on access ports
+
+VLANs must be created and configured before any routing or switching protocols are configured in later sections.
 
 <br>
 
