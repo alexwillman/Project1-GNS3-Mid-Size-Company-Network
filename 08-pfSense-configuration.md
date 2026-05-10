@@ -7,11 +7,12 @@ This section will include an addition to the topology. It will cover:
 - Configuring pfSense interfaces
 - Installing the FRR package for OSPF
 - Configuring OSPF on pfSense
+- Adding temporary firewall rules for connectivity
 - Configuring NAT settings
 - Verifying OSPF adjacency
 - Verifying internet access from end devices
 
-pfSense firewall rules will be configured in a later section after all internal services are configured. This ensures these services can be configured and verified without firewall rules potentially blocking the traffic from these services.
+Specific pfSense firewall rules will be configured in a later section after all internal services are configured. This ensures these services can be configured and verified without firewall rules potentially blocking the traffic from these services.
 
 <br>
 
