@@ -1,6 +1,12 @@
 # Basic Device Configuration
 
-This section covers the base configuration that must be applied to all five switches before any other configuration takes place. The basic configuration includes setting the hostname, setting up passwords, enabling SSH, configuring a login banner, and shutting down unused ports.
+This section covers the base configuration that must be applied to all five switches before any other configuration takes place. The basic configuration includes:
+- Setting the hostname
+- Setting up passwords
+- Enabling SSH
+- Configuring a login banner
+- Shutting down unused ports
+
 The devices these are configured on are L3-Multilayer-SW1, L3-Multilayer-SW2, L2-SW1, L2-SW2, and L2-SW3.
 
 ## Credentials in the lab
