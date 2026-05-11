@@ -2,7 +2,11 @@
 
 Firewall rules and ACL (Access Control List) rules will work together to provide control over traffic flow in the network. Together, they will control how each VLAN in the network communicates. The firewall rules will control the traffic between the internal network and the internet, and the ACL rules will control traffic inside the internal network.
 
-This section will cover the traffic rules, replacing the temporary firewall rules with specific rules, configuring ACLs on L3-Multilayer-SW1 and L3-Multilayer-SW2, and verifying the rules are working correctly.
+This section will cover: 
+- The traffic rules
+- Replacing the temporary firewall rules with specific rules
+- Configuring ACLs on L3-Multilayer-SW1 and L3-Multilayer-SW2
+- Verifying the rules are working correctly
 
 <br>
 
