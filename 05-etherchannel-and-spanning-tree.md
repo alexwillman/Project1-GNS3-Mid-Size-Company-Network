@@ -5,7 +5,7 @@ Since this network has multiple links to each switch, we will need to implement 
 
 EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports.  
 
-In this section we will cover:
+This section will cover:
 
 - Creating the EtherChannel channel groups
 - Trunking each port channel interface
