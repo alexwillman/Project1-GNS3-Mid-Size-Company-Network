@@ -5,6 +5,17 @@ Since this network has multiple links to each switch, we will need to implement 
 
 EtherChannel must be configured before STP so that STP can make the correct forwarding decisions based on the port-channel interfaces instead of the individual ports.  
 
+In this section we will cover:
+
+- Creating the EtherChannel channel groups
+- Trunking each port channel interface
+- Verifying the EtherChannel creation
+- Enabling Rapid PVST+
+- Setting root bridge priorities
+- Enabling PortFast and BPDU guard
+- Verifying Spanning Tree configuration
+- The common problems from this section
+
 ## EtherChannel Bundles List
 
 All six EtherChannel bundles use LACP (Link Aggregation Control Protocol). LACP is the protocol that negotiates the bundle between two switches. One side of the link is active and the other is passive. Active initiates the negotiation and passive responds to it, so at least one side must be active for the bundle to form.
