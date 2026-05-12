@@ -202,7 +202,7 @@ The SVI interface should show the correct IP address and a status and protocol o
 
 ## Configuring Management SVIs on Layer 2 Switches
 
-The layer 2 switches will need a VLAN 99 SVI for SSH access to manage the devices. The default gateway will point to the HSRP virtual IP for VLAN 99 to allow management traffic to be routed. IP routing may be enabled already so we remove it so that the switch does not ignore the default gateway set.
+The layer 2 switches will need a VLAN 99 SVI for SSH access to manage the devices. The default gateway will point to the HSRP virtual IP for VLAN 99 to allow management traffic to be routed. IP routing may be enabled already so we remove it so that the switch does not ignore the default gateway that is set.
 
 
 ### L2-SW1
