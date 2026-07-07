@@ -76,6 +76,8 @@ We will secure the console port using a password, set the session timeout to 10 
 ### Commands:
 
 ```
+configure terminal
+
 service password-encryption
 line console 0
 password P@ssw0rd!
