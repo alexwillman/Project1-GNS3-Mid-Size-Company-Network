@@ -151,6 +151,9 @@ For security purposes, unused ports are administratively shut down and put into 
 Create this vlan on every switch.
 
 ```
+enable
+configure terminal
+
 vlan 999
 name BLACK-HOLE
 exit
