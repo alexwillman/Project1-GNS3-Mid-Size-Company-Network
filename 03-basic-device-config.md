@@ -76,6 +76,7 @@ We will secure the console port using a password, set the session timeout to 10 
 ### Commands:
 
 ```
+enable
 configure terminal
 
 service password-encryption
@@ -96,6 +97,9 @@ SSH allows the secure remote access from the Ubuntu-Admin-PC. Privilege 15 grant
 ### Commands: 
 
 ```
+enable
+configure terminal
+
 ip domain-name ecorp.local
 username ecorpadmin privilege 15 secret P@ssw0rd!
 crypto key generate rsa (choose 2048 bits when prompted)
@@ -120,6 +124,9 @@ The banner is displayed before you login to the device and is a legal warning to
 ### Commands: 
 
 ```
+enable
+configure terminal
+
 banner motd # AUTHORIZED USERS ONLY. UNAUTHORIZED ACCESS IS PROHIBITED! #
 ```
 **Note:** The message should begin and end with a special character
